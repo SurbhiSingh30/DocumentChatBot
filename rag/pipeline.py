@@ -1,5 +1,5 @@
 import os
-
+from config import TOP_K
 from parser.pdf_parser import extract_text_from_pdf
 from processing.cleaner import clean_text
 from processing.chunker import create_chunks
@@ -41,7 +41,7 @@ class RAGPipeline:
 
         print(f"\n Stored {len(chunks)} chunks from '{filename}'")
 
-    def ask(self, question, top_k=4):
+    def ask(self, question, top_k=TOP_K):
 
         # Step 1: Convert question into embedding
         query_embedding = self.embedding_model.embed_query(question)

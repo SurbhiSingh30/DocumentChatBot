@@ -1,5 +1,5 @@
 import os
-
+from config import LLM_MODEL
 from dotenv import load_dotenv
 from groq import Groq
 
@@ -50,7 +50,7 @@ Answer
 """
 
         response = self.client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model=LLM_MODEL,
             messages=[
                 {
                     "role": "user",

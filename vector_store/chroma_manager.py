@@ -1,7 +1,7 @@
 import os
 import chromadb
 from chromadb.config import Settings
-
+from config import COLLECTION_NAME
 
 class ChromaManager:
     """
@@ -27,7 +27,7 @@ class ChromaManager:
 
         # Create (or load) collection
         self.collection = self.client.get_or_create_collection(
-            name="documents"
+            name=COLLECTION_NAME
         )
 
     def add_documents(self, chunks, embeddings, filename):

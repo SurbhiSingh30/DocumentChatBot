@@ -1,5 +1,5 @@
 from sentence_transformers import SentenceTransformer
-
+from config import EMBEDDING_MODEL
 
 class EmbeddingModel:
     """
@@ -8,7 +8,7 @@ class EmbeddingModel:
 
     def __init__(self):
         # Load the embedding model once
-        self.model = SentenceTransformer("all-MiniLM-L6-v2")
+        self.model = SentenceTransformer(EMBEDDING_MODEL)
 
     def embed_documents(self, chunks: list[str]) -> list[list[float]]:
         """
