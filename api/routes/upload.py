@@ -16,9 +16,17 @@ async def upload_pdf(file: UploadFile = File(...)):
     with open(file_path, "wb") as buffer:
         buffer.write(await file.read())
 
-    pipeline.ingest(file_path)
+    processed = pipeline.ingest(file_path)
+
+    if processed:
+        return {
+            "success": True,
+            "status": "processed",
+            "message": "Document uploaded and indexed successfully."
+        }
+
     return {
         "success": True,
-        "message": "Document uploaded and processed successfully.",
-        "filename": file.filename
+        "status": "already_exists",
+        "message": "Document already exists."
     }

@@ -67,3 +67,30 @@ class ChromaManager:
         )
 
         return results
+    
+    def document_exists(self, filename):
+        """
+        Check whether a document has already been indexed.
+        """
+
+        results = self.collection.get(
+            where={"filename": filename}
+        )
+
+        return len(results["ids"]) > 0
+    
+    def list_documents(self):
+        """
+        Return all unique document names stored in ChromaDB.
+        """
+
+        results = self.collection.get(
+            include=["metadatas"]
+        )
+
+        filenames = set()
+
+        for metadata in results["metadatas"]:
+            filenames.add(metadata["filename"])
+
+        return sorted(list(filenames))

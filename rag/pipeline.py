@@ -6,7 +6,7 @@ from processing.chunker import create_chunks
 from processing.embeddings import EmbeddingModel
 from vector_store.chroma_manager import ChromaManager
 from llm.groq_client import GroqClient
-
+from parser.docx_parse import extract_text_from_docx
 
 class RAGPipeline:
 
@@ -19,15 +19,30 @@ class RAGPipeline:
     def ingest(self, file_path):
 
         filename = os.path.basename(file_path)
-
+        if self.chroma_manager.document_exists(filename):
+            print(f"\n'{filename}' already exists. Skipping ingestion.")
+            return False
+        
         # Step 1: Extract text
-        raw_text = extract_text_from_pdf(file_path)
+        if filename.endswith(".pdf"):
+            raw_text = extract_text_from_pdf(file_path)
+        elif filename.endswith(".docx"):
+            raw_text = extract_text_from_docx(file_path)
+        else:
+            raise ValueError("Unsupported file format. Please upload a PDF or DOCX file.")
+        print("Raw text length:", len(raw_text))
 
         # Step 2: Clean text
         cleaned_text = clean_text(raw_text)
+        print("Cleaned text length:", len(cleaned_text))
 
         # Step 3: Create chunks
         chunks = create_chunks(cleaned_text)
+        print("Chunks:", len(chunks))
+        if not chunks:
+            raise ValueError(
+        "No text could be extracted from the uploaded PDF."
+    )
 
         # Step 4: Generate embeddings
         embeddings = self.embedding_model.embed_documents(chunks)
@@ -40,6 +55,8 @@ class RAGPipeline:
         )
 
         print(f"\n Stored {len(chunks)} chunks from '{filename}'")
+
+        return True
 
     def ask(self, question, top_k=TOP_K):
 
@@ -65,4 +82,7 @@ class RAGPipeline:
         )
 
         return answer
+
+    def list_documents(self):
+        return self.chroma_manager.list_documents()
         
