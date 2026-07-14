@@ -2,15 +2,6 @@ import re
 
 
 def clean_text(text: str) -> str:
-    """
-    Clean extracted document text.
-
-    Steps:
-    1. Remove extra spaces.
-    2. Normalize multiple newlines.
-    3. Remove excessive blank lines.
-    """
-
     # Remove extra spaces and tabs
     text = re.sub(r"[ \t]+", " ", text)
 

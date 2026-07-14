@@ -7,7 +7,7 @@ from processing.embeddings import EmbeddingModel
 from vector_store.chroma_manager import ChromaManager
 from llm.groq_client import GroqClient
 from parser.docx_parse import extract_text_from_docx
-
+from utils.logger import logger
 class RAGPipeline:
 
     def __init__(self):
@@ -16,38 +16,38 @@ class RAGPipeline:
         self.chroma_manager = ChromaManager()
         self.llm = GroqClient()
 
-    def ingest(self, file_path):
+    def ingest(self, file_path, replace=False):
 
         filename = os.path.basename(file_path)
-        if self.chroma_manager.document_exists(filename):
-            print(f"\n'{filename}' already exists. Skipping ingestion.")
+        if self.chroma_manager.document_exists(filename) and not replace:
+            logger.info(f"'{filename}' already exists. Skipping ingestion.")
             return False
         
-        # Step 1: Extract text
+        # Extract text
         if filename.endswith(".pdf"):
             raw_text = extract_text_from_pdf(file_path)
         elif filename.endswith(".docx"):
             raw_text = extract_text_from_docx(file_path)
         else:
             raise ValueError("Unsupported file format. Please upload a PDF or DOCX file.")
-        print("Raw text length:", len(raw_text))
+        logger.info("Raw text length: %d", len(raw_text))
 
-        # Step 2: Clean text
+        # Clean text
         cleaned_text = clean_text(raw_text)
-        print("Cleaned text length:", len(cleaned_text))
+        logger.info("Cleaned text length: %d", len(cleaned_text))
 
-        # Step 3: Create chunks
+        # Create chunks
         chunks = create_chunks(cleaned_text)
-        print("Chunks:", len(chunks))
+        logger.info("Chunks: %d", len(chunks))
         if not chunks:
             raise ValueError(
             "No extractable text found in the uploaded document."
             )
 
-        # Step 4: Generate embeddings
+        # Generate embeddings
         embeddings = self.embedding_model.embed_documents(chunks)
 
-        # Step 5: Store in ChromaDB
+        # Store in ChromaDB
         self.chroma_manager.add_documents(
             chunks=chunks,
             embeddings=embeddings,
@@ -60,22 +60,21 @@ class RAGPipeline:
 
     def ask(self, question, top_k=TOP_K):
 
-        # Step 1: Convert question into embedding
+        # Convert question into embedding
         query_embedding = self.embedding_model.embed_query(question)
 
-        # Step 2: Search ChromaDB
+        # Search ChromaDB
         results = self.chroma_manager.search(
             query_embedding=query_embedding,
             top_k=top_k
         )
-
-        # Step 3: Extract retrieved documents
+        # Extract retrieved documents
         documents = results["documents"][0]
 
-        # Step 4: Build context
+        # Build context
         context = "\n\n".join(documents)
 
-        # Step 5: Generate answer
+        # Generate answer
         answer = self.llm.generate_answer(
             question=question,
             context=context
@@ -85,6 +84,28 @@ class RAGPipeline:
 
     def list_documents(self):
         return self.chroma_manager.list_documents()
+    
+    def replace_document(self, file_path):
+        """
+        Replace an existing document with a newly uploaded version.
+        """
+
+        filename = os.path.basename(file_path)
+
+        # Delete old embeddings
+        self.chroma_manager.delete_document(filename)
+
+        # Re-ingest the new document
+        return self.ingest(
+            file_path,
+            replace=True
+        )
 
     def delete_document(self, filename):
         return self.chroma_manager.delete_document(filename)    
+
+    def get_document_info(self, filename):
+        return self.chroma_manager.get_document_info(filename)
+    
+    def search_documents(self, query):
+       return self.chroma_manager.search_documents(query)

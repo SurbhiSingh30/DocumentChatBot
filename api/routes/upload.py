@@ -1,18 +1,20 @@
 import os
 
-from fastapi import APIRouter, UploadFile, File, HTTPException
+from api.schemas.upload import UploadResponse
+from fastapi import APIRouter, UploadFile, File, HTTPException, Query
 from rag.pipeline_instance import pipeline
 
-router = APIRouter()
+router = APIRouter(prefix="/documents", tags=["documents"])
 
 UPLOAD_FOLDER = "documents"
 
 
-@router.post("/upload")
-async def upload_document(file: UploadFile = File(...)):
+@router.post(
+    "/upload",
+    response_model=UploadResponse
+)
+async def upload_document(file: UploadFile = File(...), replace: bool = Query(False)):
 
-    try:
-        # Validate file type
         if not (file.filename.endswith(".pdf") or file.filename.endswith(".docx")):
             raise HTTPException(
                 status_code=400,
@@ -29,7 +31,10 @@ async def upload_document(file: UploadFile = File(...)):
         with open(file_path, "wb") as buffer:
             buffer.write(await file.read())
 
-        processed = pipeline.ingest(file_path)
+        if replace:
+            processed = pipeline.replace_document(file_path)
+        else:
+            processed = pipeline.ingest(file_path)
 
         if processed:
             return {
@@ -44,17 +49,4 @@ async def upload_document(file: UploadFile = File(...)):
             "message": "Document already exists."
         }
 
-    except HTTPException:
-        raise
-
-    except ValueError as e:
-        raise HTTPException(
-            status_code=400,
-            detail=str(e)
-        )
-
-    except Exception:
-        raise HTTPException(
-            status_code=500,
-            detail="Internal server error."
-        )
+    

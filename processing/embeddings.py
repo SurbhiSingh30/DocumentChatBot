@@ -11,13 +11,7 @@ class EmbeddingModel:
         self.model = SentenceTransformer(EMBEDDING_MODEL)
 
     def embed_documents(self, chunks: list[str]) -> list[list[float]]:
-        """
-        Generate embeddings for document chunks.
-        """
         return self.model.encode(chunks, convert_to_numpy=True).tolist()
 
     def embed_query(self, query: str) -> list[float]:
-        """
-        Generate embedding for a user question.
-        """
         return self.model.encode(query, convert_to_numpy=True).tolist()

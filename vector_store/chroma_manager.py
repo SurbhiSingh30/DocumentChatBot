@@ -2,7 +2,7 @@ import os
 import chromadb
 from chromadb.config import Settings
 from config import COLLECTION_NAME
-
+from utils.logger import logger
 class ChromaManager:
     """
     Handles creation, storage and retrieval
@@ -31,10 +31,6 @@ class ChromaManager:
         )
 
     def add_documents(self, chunks, embeddings, filename):
-        """
-        Store chunks, embeddings and metadata in ChromaDB.
-        """
-
         ids = []
         metadatas = []
 
@@ -53,13 +49,9 @@ class ChromaManager:
             metadatas=metadatas
         )
 
-        print(f"\n Stored {len(chunks)} chunks in ChromaDB.")
+        logger.info(f"\n Stored {len(chunks)} chunks in ChromaDB.")
 
     def search(self, query_embedding, top_k=4):
-        """
-        Search the vector database using a query embedding.
-        """
-
         results = self.collection.query(
             query_embeddings=[query_embedding],
             n_results=top_k,
@@ -69,10 +61,6 @@ class ChromaManager:
         return results
     
     def document_exists(self, filename):
-        """
-        Check whether a document has already been indexed.
-        """
-
         results = self.collection.get(
             where={"filename": filename}
         )
@@ -80,10 +68,6 @@ class ChromaManager:
         return len(results["ids"]) > 0
     
     def list_documents(self):
-        """
-        Return all unique document names stored in ChromaDB.
-        """
-
         results = self.collection.get(
             include=["metadatas"]
         )
@@ -95,11 +79,29 @@ class ChromaManager:
 
         return sorted(list(filenames))
     
-    def delete_document(self, filename):
-        """
-        Delete all chunks belonging to a document.
-        """
+    def search_documents(self, query):
+        documents = self.list_documents()
 
+        return [doc for doc in documents
+            if query.lower() in doc.lower()]
+        
+    def get_document_info(self, filename):
+        results = self.collection.get(
+            where={"filename": filename},
+            include=["metadatas"]
+        )
+
+        if len(results["ids"]) == 0:
+            return None
+
+        metadata = results["metadatas"][0]
+
+        return {
+            "filename": metadata["filename"],
+            "chunks": len(results["ids"])
+        }
+    
+    def delete_document(self, filename):
         results = self.collection.get(
             where={"filename": filename}
         )
@@ -112,3 +114,7 @@ class ChromaManager:
         )
 
         return True
+    
+    
+        
+    

@@ -5,10 +5,6 @@ from groq import Groq
 
 
 class GroqClient:
-    """
-    Handles communication with the Groq LLM.
-    """
-
     def __init__(self):
 
         load_dotenv()
