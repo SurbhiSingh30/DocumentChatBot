@@ -41,8 +41,8 @@ class RAGPipeline:
         print("Chunks:", len(chunks))
         if not chunks:
             raise ValueError(
-        "No text could be extracted from the uploaded PDF."
-    )
+            "No extractable text found in the uploaded document."
+            )
 
         # Step 4: Generate embeddings
         embeddings = self.embedding_model.embed_documents(chunks)
@@ -85,4 +85,6 @@ class RAGPipeline:
 
     def list_documents(self):
         return self.chroma_manager.list_documents()
-        
+
+    def delete_document(self, filename):
+        return self.chroma_manager.delete_document(filename)    

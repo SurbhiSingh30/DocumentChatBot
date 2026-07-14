@@ -94,3 +94,21 @@ class ChromaManager:
             filenames.add(metadata["filename"])
 
         return sorted(list(filenames))
+    
+    def delete_document(self, filename):
+        """
+        Delete all chunks belonging to a document.
+        """
+
+        results = self.collection.get(
+            where={"filename": filename}
+        )
+
+        if len(results["ids"]) == 0:
+            return False
+
+        self.collection.delete(
+            ids=results["ids"]
+        )
+
+        return True
