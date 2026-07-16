@@ -5,21 +5,25 @@ from rag.pipeline_instance import pipeline
 from api.schemas.document import DocumentInfoResponse
 from fastapi import HTTPException
 from api.schemas.document import (DocumentListResponse, DeleteResponse)
+from fastapi import Depends
+from auth.dependencies import get_current_user
+from database.models import User
+from api.schemas.chat import ChatResponse
+
+router = APIRouter(prefix="/documents", tags=["Documents"])
 
 
-router = APIRouter(prefix="/chat", tags=["Chat"])
-
-
-@router.get("/documents", response_model=DocumentListResponse)
-def get_documents():
+@router.get("", response_model=DocumentListResponse)
+def get_documents(request: ChatResponse, current_user: User = Depends(get_current_user)):
+    answer = pipeline.list_documents()
     return {
         "success": True,
-        "documents": pipeline.list_documents()
+        "documents": answer
     }
 
 
-@router.delete("/documents/{filename}", response_model=DeleteResponse)
-def delete_document(filename: str):
+@router.delete("/{filename}", response_model=DeleteResponse)
+def delete_document(filename: str,request: ChatResponse, current_user: User = Depends(get_current_user)):
 
     deleted = pipeline.delete_document(filename)
 
@@ -34,8 +38,8 @@ def delete_document(filename: str):
         "message": f"{filename} deleted successfully."
     }
 
-@router.get("/documents/{filename}/info", response_model=DocumentInfoResponse)
-def get_document_info(filename: str):
+@router.get("/{filename}/info", response_model=DocumentInfoResponse)
+def get_document_info(filename: str, request: ChatResponse, current_user: User = Depends(get_current_user)):
 
     document = pipeline.get_document_info(filename)
 
@@ -49,8 +53,8 @@ def get_document_info(filename: str):
         "success": True,
         "document": document
     }
-@router.get("/documents/{filename}/download")
-def download_document(filename: str):
+@router.get("/{filename}/download")
+def download_document(filename: str, request: ChatResponse, current_user: User = Depends(get_current_user)):
 
     file_path = os.path.join("documents", filename)
 
@@ -66,8 +70,8 @@ def download_document(filename: str):
         media_type="application/octet-stream"
     )
 
-@router.get("/documents/search")
-def search_documents(query: str):
+@router.get("/search")
+def search_documents(query: str, request: ChatResponse, current_user: User = Depends(get_current_user) ):
 
     documents = pipeline.search_documents(query)
 
