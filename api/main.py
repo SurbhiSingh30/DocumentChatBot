@@ -15,29 +15,29 @@ app = FastAPI(
 )
 
 
-def custom_openapi():
-    if app.openapi_schema:
-        return app.openapi_schema
+# def custom_openapi():
+#     if app.openapi_schema:
+#         return app.openapi_schema
 
-    openapi_schema = get_openapi(
-        title=app.title,
-        version=app.version,
-        routes=app.routes,
-    )
+#     openapi_schema = get_openapi(
+#         title=app.title,
+#         version=app.version,
+#         routes=app.routes,
+#     )
 
-    openapi_schema["components"]["securitySchemes"] = {
-        "BearerAuth": {
-            "type": "http",
-            "scheme": "bearer",
-            "bearerFormat": "JWT"
-        }
-    }
+#     openapi_schema["components"]["securitySchemes"] = {
+#         "BearerAuth": {
+#             "type": "http",
+#             "scheme": "bearer",
+#             "bearerFormat": "JWT"
+#         }
+#     }
 
-    app.openapi_schema = openapi_schema
-    return app.openapi_schema
+#     app.openapi_schema = openapi_schema
+#     return app.openapi_schema
 
 
-app.openapi = custom_openapi
+# app.openapi = custom_openapi
 app.add_exception_handler(ValueError, value_error_handler)
 app.add_exception_handler(Exception, generic_exception_handler)
 

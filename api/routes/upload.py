@@ -15,7 +15,7 @@ router = APIRouter(prefix="/documents", tags=["documents"])
 
 UPLOAD_FOLDER = "documents"
 
-@router.post("/upload")
+@router.post("/upload", response_model=UploadResponse)
 async def upload_document(
     file: UploadFile = File(...), 
     current_user: User = Depends(get_current_user),
