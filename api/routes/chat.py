@@ -1,6 +1,10 @@
 from sqlalchemy.orm import Session
 from database.session import get_db
-from database.crud import create_chat, create_message
+from database.crud import (
+    create_chat, 
+    create_message,
+    get_chat
+    )
 from database.models import Document
 
 from fastapi import HTTPException
@@ -36,18 +40,27 @@ async def ask(
             detail="No document found for this user."
         )
 
-    chat = create_chat(
+    chat = get_chat(
+    db=db,
+    user_id=current_user.user_id,
+    document_id=document.document_id
+    )
+
+    if chat is None:
+     chat = create_chat(
         db=db,
         user_id=current_user.user_id,
         document_id=document.document_id
     )
-
+     
     create_message(
     db=db,
     chat_id=chat.chat_id,
     sender="user",
     content=request.question
 )
+    pipeline.set_user(current_user.user_id)
+    
     answer = pipeline.ask(request.question)
 
     create_message(

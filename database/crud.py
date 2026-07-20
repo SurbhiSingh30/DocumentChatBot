@@ -41,6 +41,16 @@ def create_chat(
 
     return chat
 
+def get_chat(
+    db: Session,
+    user_id: int,
+    document_id: int
+):
+    return db.query(Chat).filter(
+        Chat.user_id == user_id,
+        Chat.document_id == document_id
+    ).first()
+
 
 def create_message(
     db: Session,

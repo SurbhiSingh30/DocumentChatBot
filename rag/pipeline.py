@@ -13,8 +13,15 @@ class RAGPipeline:
     def __init__(self):
 
         self.embedding_model = EmbeddingModel()
-        self.chroma_manager = ChromaManager()
+        self.chroma_manager = None
         self.llm = GroqClient()
+
+
+    def set_user(self, user_id: int):
+        self.chroma_manager = ChromaManager(
+        user_id=str(user_id)
+        )
+
 
     def ingest(self, file_path, replace=False):
 

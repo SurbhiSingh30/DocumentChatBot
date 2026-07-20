@@ -39,6 +39,8 @@ async def upload_document(
         with open(file_path, "wb") as buffer:
             buffer.write(await file.read())
 
+        pipeline.set_user(current_user.user_id)
+        
         if replace:
             processed = pipeline.replace_document(file_path)
         else:
