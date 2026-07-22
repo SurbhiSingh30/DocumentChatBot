@@ -6,7 +6,7 @@ box-sizing:border-box;
 
 body{
 
-font-family:Inter,sans-serif;
+font-family:Inter,sora;
 
 background:var(--dark-bg);
 
@@ -14,4 +14,31 @@ color:var(--text-light);
 
 overflow:hidden;
 
+}
+
+body{
+
+background:#0F172A;
+
+background-image:url("../assets/patterns/pattern.svg");
+
+background-repeat:repeat;
+
+background-size:550px;
+
+background-attachment:fixed;
+
+}
+
+h1{
+    font-family: "Sora";
+    font-size: 42px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+p{
+    font-family: "Inter";
+    color: #94A3B8;
+    font-size: 18px;
 }

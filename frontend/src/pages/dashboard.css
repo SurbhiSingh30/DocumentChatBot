@@ -1,0 +1,57 @@
+.dashboard{
+    display:flex;
+    flex-direction:column;
+    gap:40px;
+}
+
+.hero{
+    margin-top:20px;
+    
+}
+
+.hero p{
+    max-width:650px;
+    line-height:1.7;
+}
+
+.quick-actions{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,250px);
+
+    gap:20px;
+
+}
+
+.quick-actions button{
+
+    background:#1E293B;
+
+    border:none;
+
+    color:white;
+
+    padding:22px;
+
+    border-radius:18px;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+    transition:.25s;
+
+    text-align:left;
+
+}
+
+.quick-actions button:hover{
+
+    transform:translateY(-4px);
+
+    background:#008378;
+
+    box-shadow:0 10px 30px rgba(108, 197, 163, 0.35);
+
+}

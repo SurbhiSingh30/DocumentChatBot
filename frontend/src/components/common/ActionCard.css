@@ -1,0 +1,97 @@
+.action-card {
+
+    background: rgba(30, 41, 59, 0.65);
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+
+    border: 1px solid rgba(255,255,255,.08);
+
+    border-radius: 22px;
+
+    padding: 28px;
+
+    min-height: 190px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 18px;
+
+    transition: .3s ease;
+
+    cursor: pointer;
+}
+
+.action-card:hover {
+
+  transform: translateY(-8px);
+
+  border-color:#008378;
+
+  box-shadow: 0 20px 40px rgba(37,99,235,.22);
+
+}
+
+.card-icon {
+  width: 60px;
+  height: 60px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 18px;
+
+  background: rgba(37, 99, 235, 0.12);
+
+  color: #008378;
+
+  transition: 0.3s ease;
+}
+
+.action-card h3{
+
+    margin:0;
+
+    font-family:"Sora";
+
+}
+
+.action-card p{
+
+    margin:0;
+
+    line-height:1.6;
+
+    font-size:15px;
+
+}
+
+.action-card span{
+
+    margin-top:auto;
+
+    font-size:24px;
+
+    color:#14B8A6;
+
+}
+
+.action-card:hover .card-icon {
+  background: #008378;
+  color: white;
+  transform: rotate(-6deg) scale(1.08);
+}
+
+.card-arrow {
+  margin-top: auto;
+
+  color: #14B8A6;
+
+  transition: 0.3s ease;
+}
+
+.action-card:hover .card-arrow {
+  transform: translate(4px, -4px);
+}
