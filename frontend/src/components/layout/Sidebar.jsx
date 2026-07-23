@@ -7,28 +7,37 @@ import {
   Settings,
 } from "lucide-react";
 
+import {
+  PanelLeftClose,
+  PanelLeftOpen,
+} from "lucide-react";
+
 import { NavLink } from "react-router-dom";
 
-function Sidebar({ collapsed }) {
+function Sidebar({ collapsed, setCollapsed }) {
 
   return (
     <aside className={`sidebar ${collapsed ? "collapsed" : ""}`}>
+      <div className="sidebar-top">
 
-      <div className="logo-section">
+      <button
+        className="collapse-btn"
+        onClick={() => setCollapsed(!collapsed)}
+       >
+       {collapsed ? (
+      <PanelLeftOpen size={22} />
+        ) : (
+        <PanelLeftClose size={22} />
+         )}
+       </button>
 
-        <img
-          src="/src/assets/logo/Stratum.png"
-          alt="Stratum Logo"
-          className="logo"
-        />
+      </div>
+      
+      <div className={`brand-section ${collapsed ? "hidden" : ""}`}>
 
-        <div>
+        <h2>STRATUM</h2>
 
-          <h2>STRATUM</h2>
-
-          <p>AI Document Intelligence</p>
-
-        </div>
+        <p>AI Document Intelligence</p>
 
       </div>
 

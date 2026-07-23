@@ -7,12 +7,12 @@ import "./layout.css";
 
 function Layout() {
     const [collapsed, setCollapsed] = useState(false);
-    console.log(collapsed);
     return (
         <div className="layout">
 
             <Sidebar
                 collapsed={collapsed}
+                setCollapsed={setCollapsed}
             />
 
             <div className="main">

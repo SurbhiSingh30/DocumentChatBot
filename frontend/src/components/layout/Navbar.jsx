@@ -1,35 +1,31 @@
-import { Bell, Search, Moon, Menu } from "lucide-react";
+import { Bell, Search, Moon } from "lucide-react";
+import logo from "../../assets/logo/Stratum.png";
 
-function Navbar({ collapsed, setCollapsed }) {
+function Navbar() {
   return (
     <header className="navbar">
-        <button
-         className="menu-btn"
-         onClick={() => setCollapsed(!collapsed)}>
-        <Menu size={22} />
-       </button>
 
-      <div className="search-box">
+      <div className="navbar-left">
+        <div className="search-box">
+          <Search size={18} />
 
-        <Search size={18} />
-
-        <input
-          type="text"
-          placeholder="Search documents..."
-        />
-
+          <input
+            type="text"
+            placeholder="Search documents..."
+          />
+        </div>
       </div>
 
       <div className="navbar-right">
-
         <Bell size={20} />
 
         <Moon size={20} />
 
-        <div className="avatar">
-          
-        </div>
-
+        <img
+          src={logo}
+          alt="Stratum Logo"
+          className="navbar-logo"
+        />
       </div>
 
     </header>
