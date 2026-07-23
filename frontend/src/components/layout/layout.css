@@ -68,6 +68,7 @@
     margin-bottom:24px;
 }
 
+
 .collapse-btn{
     width:44px;
     height:44px;
@@ -79,7 +80,7 @@
     border:none;
     border-radius:12px;
 
-    background:#1F2937;
+    background:#273449;;
     color:white;
 
     cursor:pointer;
@@ -88,29 +89,43 @@
 }
 
 .collapse-btn:hover{
-    background:#2563EB;
+    background:#14B8A6;
 }
 
 
 /* ---------- Brand ---------- */
 
 .brand-section{
-    margin-bottom:42px;
+
+    margin-top:12px;
+    margin-bottom:48px;
+
 }
 
 .brand-section h2{
+
     margin:0;
 
+    font-size:34px;
+
     font-family:"Sora";
-    font-size:30px;
+
+    letter-spacing:.5px;
+
     font-weight:700;
+
 }
 
 .brand-section p{
-    margin-top:6px;
+
+    margin-top:8px;
 
     color:#94A3B8;
+
+    line-height:1.5;
+
     font-size:14px;
+
 }
 
 
@@ -123,20 +138,25 @@
 }
 
 .sidebar a{
+
     display:flex;
+
     align-items:center;
-    gap:15px;
 
-    padding:14px 18px;
+    gap:16px;
 
-    border-radius:14px;
+    padding:16px 18px;
+
+    border-radius:16px;
 
     text-decoration:none;
 
     color:#CBD5E1;
+
     font-weight:500;
 
     transition:.25s;
+
 }
 
 .sidebar a span{
@@ -197,7 +217,8 @@
     align-items:center;
     gap:24px;
 
-    padding:18px 32px;
+    height:78px;
+    padding:0 32px;
 
     background:#111827;
     border-bottom:1px solid rgba(255,255,255,.06);
@@ -217,16 +238,27 @@
 /* ---------- Search ---------- */
 
 .search-box{
+
     width:100%;
+    max-width:650px;
 
     display:flex;
     align-items:center;
     gap:12px;
 
-    padding:12px 18px;
+    padding:14px 18px;
 
     background:#1E293B;
+
     border-radius:14px;
+
+    transition:.25s;
+}
+
+.search-box:focus-within{
+
+    box-shadow:0 0 0 2px #14B8A6;
+
 }
 
 .search-box input{
@@ -262,6 +294,24 @@
 
     object-fit:contain;
     cursor:pointer;
+}
+
+.navbar-right svg{
+
+    cursor:pointer;
+
+    color:#CBD5E1;
+
+    transition:.25s;
+
+}
+
+.navbar-right svg:hover{
+
+    color:white;
+
+    transform:translateY(-2px);
+
 }
 
 
@@ -323,3 +373,15 @@
 }
 
 */
+
+
+
+/* =========================================================
+   Global Transition
+   ========================================================= */
+*{
+    transition:
+        background .2s ease,
+        color .2s ease,
+        border-color .2s ease;
+}
