@@ -1,5 +1,18 @@
+import "./chat.css";
+
+import ChatSidebar from "../components/chat/ChatSidebar";
+import ChatWindow from "../components/chat/ChatWindow";
+
 function Chat() {
-  return <h1>Chat</h1>;
+  return (
+    <div className="chat-page">
+
+      <ChatSidebar />
+
+      <ChatWindow />
+
+    </div>
+  );
 }
 
 export default Chat;

@@ -1,0 +1,23 @@
+.settings-page{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:24px;
+}
+
+.setting-card{
+
+    background:#1E293B;
+
+    padding:28px;
+
+    border-radius:20px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+}

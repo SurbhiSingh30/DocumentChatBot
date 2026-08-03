@@ -2,6 +2,7 @@ import "./dashboard.css";
 import ActionCard from "../components/common/ActionCard";
 import HeroSection from "../components/dashboard/HeroSection";
 import StatCard from "../components/dashboard/StatCard";
+import RecentDocuments from "../components/dashboard/RecentDocuments";
 
 import {
   FileText,
@@ -75,6 +76,8 @@ function Dashboard() {
           description="Generate concise summaries."
         />
       </div>
+      {/* Recent Documents */}
+      <RecentDocuments />
     </div>
   );
 }

@@ -1,34 +1,42 @@
 function HeroSection() {
-    return (
-        <section className="hero">
+  return (
+    <section className="hero">
 
-            <div className="hero-text">
+      <div className="hero-glow"></div>
 
-                <h1>
-                    Hey
-                </h1>
+      <div className="hero-content">
 
-                <p>
-                    Welcome back to <strong>Stratum</strong>.
-                    Organize, search and interact with your documents using AI.
-                </p>
+        <div className="hero-badge">
+          ✨ AI Document Intelligence Platform
+        </div>
 
-                <div className="hero-buttons">
+        <h1>
+          Good Morning,
+          <span> Surbhi</span>
+        </h1>
 
-                    <button className="primary-btn">
-                        Upload Documents
-                    </button>
+        <p>
+          Welcome back to <strong>Stratum</strong>.
+          Organize, search, analyze and chat with your documents
+          using enterprise-grade AI.
+        </p>
 
-                    <button className="secondary-btn">
-                        Start Chat
-                    </button>
+        <div className="hero-buttons">
 
-                </div>
+          <button className="primary-btn">
+            Upload Documents
+          </button>
 
-            </div>
+          <button className="secondary-btn">
+            Start Chat
+          </button>
 
-        </section>
-    );
+        </div>
+
+      </div>
+
+    </section>
+  );
 }
 
 export default HeroSection;

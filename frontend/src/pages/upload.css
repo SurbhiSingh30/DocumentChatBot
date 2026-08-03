@@ -1,0 +1,98 @@
+
+.upload-page{
+    display:flex;
+    flex-direction:column;
+    gap:40px;
+}
+
+.upload-header h1{
+    font-size:42px;
+    font-family:"Sora";
+}
+
+.upload-header p{
+    color:#94A3B8;
+    max-width:650px;
+}
+
+.upload-zone{
+
+    background:#1E293B;
+
+    border:2px dashed rgba(20,184,166,.35);
+
+    border-radius:28px;
+
+    padding:70px;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    gap:18px;
+
+    transition:.3s;
+}
+
+.upload-zone:hover{
+
+    border-color:#14B8A6;
+
+    transform:translateY(-3px);
+
+}
+
+.upload-zone svg{
+
+    color:#14B8A6;
+
+}
+
+.upload-zone p{
+
+    color:#94A3B8;
+
+}
+
+.upload-history{
+
+    display:flex;
+    flex-direction:column;
+
+    gap:18px;
+}
+
+.history-list{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:14px;
+}
+
+.history-item{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:16px;
+
+    padding:18px 22px;
+
+    background:#1E293B;
+
+    border-radius:18px;
+
+    transition:.25s;
+}
+
+.history-item:hover{
+
+    border:1px solid #14B8A6;
+
+    transform:translateY(-3px);
+
+}
