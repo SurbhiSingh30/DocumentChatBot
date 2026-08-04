@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import ProtectedRoute from "../components/auth/ProtectedRoute";
 
 import Layout from "../components/layout/Layout"
 
@@ -16,7 +17,13 @@ function AppRoutes() {
   return (
     <Routes>
 
-      <Route element={<Layout/>} >
+      <Route
+        element={
+            <ProtectedRoute>
+                <Layout />
+            </ProtectedRoute>
+        }
+      >
 
         <Route path="/" element={<Dashboard />} />
 

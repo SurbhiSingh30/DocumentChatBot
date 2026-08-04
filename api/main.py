@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 from api.routes.upload import router as upload_router
 from api.routes.chat import router as chat_router
@@ -12,6 +13,15 @@ from api.handlers.exception_handler import (
 app = FastAPI(
     title="Document ChatBot API",
     version="1.0.0"
+)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
