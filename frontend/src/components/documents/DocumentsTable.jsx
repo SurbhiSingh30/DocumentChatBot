@@ -30,11 +30,12 @@ const docs = [
 
 ];
 
-function DocumentsTable(){
+function DocumentsTable({ documents }) {
 
     return(
 
         <div className="documents-table">
+        
 
             <div className="table-header">
 
@@ -50,26 +51,26 @@ function DocumentsTable(){
 
             </div>
 
-            {docs.map(doc=>(
+            {documents.map((doc) => (
 
                 <div
                     className="table-row"
-                    key={doc.name}
+                    key={doc.filename}
                 >
 
                     <div className="doc-name">
 
                         <FileText size={20}/>
 
-                        {doc.name}
+                        {doc.filename}
 
                     </div>
 
-                    <span>{doc.type}</span>
+                    <span>{doc.file_type}</span>
 
-                    <span>{doc.size}</span>
+                    <span>{doc.file_size}</span>
 
-                    <span>{doc.date}</span>
+                    <span>{doc.updated_to}</span>
 
                     <div className="actions">
 
