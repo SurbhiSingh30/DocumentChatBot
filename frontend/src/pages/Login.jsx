@@ -19,27 +19,44 @@ function Login() {
     setLoading(true);
     setError("");
 
-    try {
+   try {
+    const data = await loginUser(email, password);
 
-        const data = await loginUser(email, password);
+    console.log("LOGIN RESPONSE:", data);
+    console.log("ACCESS TOKEN:", data?.access_token);
 
-        localStorage.setItem(
-            "access_token",
-            data.access_token
-        );
-
-        navigate("/");
-
-    } catch (err) {
-
-        setError("Invalid email or password.");
-
-    } finally {
-
-        setLoading(false);
-
+    if (!data?.access_token) {
+        throw new Error("No access token received");
     }
-};
+
+    localStorage.setItem(
+        "access_token",
+        data.access_token
+    );
+
+    console.log(
+        "TOKEN SAVED:",
+        localStorage.getItem("access_token")
+    );
+
+    navigate("/");
+
+} catch (err) {
+
+    console.error("LOGIN FAILED:", err);
+    console.error("STATUS:", err.response?.status);
+    console.error("DATA:", err.response?.data);
+
+    setError(
+        err.response?.data?.detail ||
+        err.message ||
+        "Login failed."
+    );
+
+} finally {
+    setLoading(false);
+}
+  };
 
   return (
     <div className="login-page">

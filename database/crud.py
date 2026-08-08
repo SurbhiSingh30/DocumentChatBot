@@ -24,6 +24,42 @@ def create_documents(
     db.refresh(document)
     return document
 
+def get_documents_by_user(
+    db: Session,
+    user_id: int
+):
+    return db.query(Document).filter(
+        Document.user_id == user_id
+    ).all()
+
+
+def get_document_by_filename(
+    db: Session,
+    user_id: int,
+    filename: str
+):
+    return db.query(Document).filter(
+        Document.user_id == user_id,
+        Document.filename == filename
+    ).first()
+
+def delete_document_record(
+    db: Session,
+    user_id: int,
+    filename: str
+):
+    document = db.query(Document).filter(
+        Document.user_id == user_id,
+        Document.filename == filename
+    ).first()
+
+    if not document:
+        return False
+
+    db.delete(document)
+    db.commit()
+
+    return True
 
 def create_chat(
     db: Session,
@@ -69,3 +105,15 @@ def create_message(
     db.refresh(message)
 
     return message
+
+def search_documents_by_user(
+    db: Session,
+    user_id: int,
+    query: str
+):
+    return db.query(Document).filter(
+        Document.user_id == user_id,
+        Document.filename.ilike(f"%{query}%")
+    ).order_by(
+        Document.id.desc()
+    ).all()

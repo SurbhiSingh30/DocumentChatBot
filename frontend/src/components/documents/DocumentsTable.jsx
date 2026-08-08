@@ -5,91 +5,86 @@ import {
     Trash2
 } from "lucide-react";
 
-const docs = [
+function DocumentsTable({ documents, onDelete, onDownload, onView }) {
 
-    {
-        name:"Research.pdf",
-        type:"PDF",
-        size:"2.4 MB",
-        date:"Today"
-    },
-
-    {
-        name:"Resume.pdf",
-        type:"PDF",
-        size:"480 KB",
-        date:"Yesterday"
-    },
-
-    {
-        name:"TTL_Project.docx",
-        type:"DOCX",
-        size:"1.1 MB",
-        date:"3 days ago"
-    }
-
-];
-
-function DocumentsTable({ documents }) {
-
-    return(
-
+    return (
         <div className="documents-table">
-        
 
             <div className="table-header">
 
                 <span>Name</span>
-
                 <span>Type</span>
-
                 <span>Size</span>
-
                 <span>Uploaded</span>
-
                 <span>Actions</span>
 
             </div>
 
-            {documents.map((doc) => (
+            {documents.length === 0 ? (
 
-                <div
-                    className="table-row"
-                    key={doc.filename}
-                >
-
-                    <div className="doc-name">
-
-                        <FileText size={20}/>
-
-                        {doc.filename}
-
-                    </div>
-
-                    <span>{doc.file_type}</span>
-
-                    <span>{doc.file_size}</span>
-
-                    <span>{doc.updated_to}</span>
-
-                    <div className="actions">
-
-                        <Eye size={18}/>
-
-                        <Download size={18}/>
-
-                        <Trash2 size={18}/>
-
-                    </div>
-
+                <div className="empty-documents">
+                    <p>No documents uploaded yet.</p>
                 </div>
 
-            ))}
+            ) : (
+
+                documents.map((doc) => (
+
+                    <div
+                        className="table-row"
+                        key={doc.filename}
+                    >
+
+                        <div className="doc-name">
+
+                            <FileText size={20} />
+
+                            <span>{doc.filename}</span>
+
+                        </div>
+
+                        <span>
+                            {doc.file_type.toUpperCase()}
+                        </span>
+
+                        <span>
+                            {(doc.file_size / 1024).toFixed(1)} KB
+                        </span>
+
+                        <span>
+                            —
+                        </span>
+
+                      <div className="actions">
+
+                            <Eye 
+                                size={18} 
+                                 onClick={() => onView(doc.filename)}
+                                 style={{ cursor: "pointer" }}
+                                />
+
+                            <Download
+                                size={18}
+                                onClick={() => onDownload(doc.filename)}
+                                style={{ cursor: "pointer" }}
+                            />
+
+                            <Trash2
+                                size={18}
+                                onClick={() => onDelete(doc.filename)}
+                                style={{ cursor: "pointer" }}
+                            />
+
+                        </div> 
+
+                    </div>
+
+                ))
+
+            )}
 
         </div>
-
     );
-
 }
 
 export default DocumentsTable;

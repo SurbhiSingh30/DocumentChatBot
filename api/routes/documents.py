@@ -8,30 +8,60 @@ from api.schemas.document import (DocumentListResponse, DeleteResponse)
 from fastapi import Depends
 from auth.dependencies import get_current_user
 from database.models import User
-from api.schemas.chat import ChatResponse
-
+from database.session import get_db
+from database.crud import (
+    get_documents_by_user,
+    delete_document_record
+)
+from sqlalchemy.orm import Session
 router = APIRouter(prefix="/documents", tags=["Documents"])
 
 
 @router.get("", response_model=DocumentListResponse)
-def get_documents(request: ChatResponse, current_user: User = Depends(get_current_user)):
-    answer = pipeline.list_documents()
+def get_documents(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    documents = get_documents_by_user(
+        db=db,
+        user_id=current_user.user_id
+    )
+
     return {
         "success": True,
-        "documents": answer
+        "documents": documents
     }
 
-
 @router.delete("/{filename}", response_model=DeleteResponse)
-def delete_document(filename: str,request: ChatResponse, current_user: User = Depends(get_current_user)):
+def delete_document(
+    filename: str,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    # Set the current user's ChromaDB
+    pipeline.set_user(current_user.user_id)
 
-    deleted = pipeline.delete_document(filename)
+    # Delete from ChromaDB
+    deleted_from_chroma = pipeline.delete_document(filename)
 
-    if not deleted:
+    if not deleted_from_chroma:
         raise HTTPException(
             status_code=404,
             detail="Document not found."
         )
+
+    # Delete from SQL database
+    delete_document_record(
+        db=db,
+        user_id=current_user.user_id,
+        filename=filename
+    )
+
+    # Delete physical file
+    file_path = os.path.join("documents", filename)
+
+    if os.path.exists(file_path):
+        os.remove(file_path)
 
     return {
         "success": True,
@@ -39,7 +69,7 @@ def delete_document(filename: str,request: ChatResponse, current_user: User = De
     }
 
 @router.get("/{filename}/info", response_model=DocumentInfoResponse)
-def get_document_info(filename: str, request: ChatResponse, current_user: User = Depends(get_current_user)):
+def get_document_info(filename: str, current_user: User = Depends(get_current_user)):
 
     document = pipeline.get_document_info(filename)
 
@@ -54,7 +84,7 @@ def get_document_info(filename: str, request: ChatResponse, current_user: User =
         "document": document
     }
 @router.get("/{filename}/download")
-def download_document(filename: str, request: ChatResponse, current_user: User = Depends(get_current_user)):
+def download_document(filename: str, current_user: User = Depends(get_current_user)):
 
     file_path = os.path.join("documents", filename)
 
@@ -67,11 +97,14 @@ def download_document(filename: str, request: ChatResponse, current_user: User =
     return FileResponse(
         path=file_path,
         filename=filename,
-        media_type="application/octet-stream"
+        media_type="application/pdf",
+        headers={
+            "Content-Disposition":"inline"
+        }
     )
 
 @router.get("/search")
-def search_documents(query: str, request: ChatResponse, current_user: User = Depends(get_current_user) ):
+def search_documents(query: str, current_user: User = Depends(get_current_user) ):
 
     documents = pipeline.search_documents(query)
 

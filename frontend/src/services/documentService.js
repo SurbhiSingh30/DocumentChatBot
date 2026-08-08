@@ -7,6 +7,7 @@ const getAuthHeaders = () => ({
 });
 
 export const uploadDocument = async (file, replace = false) => {
+
     const formData = new FormData();
     formData.append("file", file);
 
@@ -25,6 +26,7 @@ export const uploadDocument = async (file, replace = false) => {
 };
 
 export const getDocuments = async () => {
+
     const response = await axios.get(
         `${API}/documents`,
         {
@@ -36,12 +38,54 @@ export const getDocuments = async () => {
 };
 
 export const deleteDocument = async (filename) => {
+
     const response = await axios.delete(
-        `${API}/documents/${filename}`,
+        `${API}/documents/${encodeURIComponent(filename)}`,
         {
             headers: getAuthHeaders(),
         }
     );
 
     return response.data;
+};
+
+export const downloadDocument = async (filename) => {
+    const response = await axios.get(
+        `/documents/${encodeURIComponent(filename)}/download`,
+        {
+            responseType: "blob",
+        }
+    );
+
+    const url = window.URL.createObjectURL(response.data);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+
+    document.body.appendChild(link);
+    link.click();
+
+    link.remove();
+    window.URL.revokeObjectURL(url);
+};
+
+export const viewDocument = async (filename) => {
+
+    const response = await axios.get(
+        `${API}/documents/${encodeURIComponent(filename)}/download`,
+        {
+            headers: getAuthHeaders(),
+            responseType: "blob",
+        }
+    );
+
+    const blob = new Blob(
+        [response.data],
+        { type: "application/pdf" }
+    );
+
+    const url = window.URL.createObjectURL(blob);
+
+    window.open(url, "_blank");
 };
