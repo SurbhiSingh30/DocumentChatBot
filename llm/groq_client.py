@@ -56,3 +56,56 @@ Answer
             temperature=0
         )
         return response.choices[0].message.content
+
+def generate_summary(self, context, summary_length="medium"):
+
+    length_instructions = {
+        "short": "Give a very concise summary in 3-5 bullet points.",
+        "medium": "Give a clear summary with 5-8 important bullet points.",
+        "detailed": "Give a detailed summary covering all major points, findings, and important information."
+    }
+
+    instruction = length_instructions.get(
+        summary_length,
+        length_instructions["medium"]
+    )
+
+    prompt = f"""
+You are an AI document summarization assistant.
+
+Your task is to summarize ONLY the provided document context.
+
+Rules:
+
+1. Use ONLY the context below.
+2. Do NOT use outside knowledge.
+3. Do NOT invent or assume information.
+4. {instruction}
+5. Keep the summary clear, accurate and easy to read.
+6. If the context does not contain enough information, say:
+   "I could not generate a summary from the uploaded document."
+
+---
+
+## Document Context
+
+{context}
+
+---
+
+## Summary
+
+"""
+
+    response = self.client.chat.completions.create(
+        model=LLM_MODEL,
+        messages=[
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ],
+        temperature=0
+    )
+
+    return response.choices[0].message.content

@@ -1,29 +1,29 @@
 function StatCard({
-  title,
-  value,
-  icon: Icon,
-  color,
+    title,
+    value,
+    icon: Icon,
+    color,
 }) {
-  return (
-    <div className="stat-card">
+    return (
+        <div className="stat-card">
 
-      <div
-        className="stat-icon"
-        style={{ background: color }}
-      >
-        <Icon size={22} />
-      </div>
+            <div
+                className="stat-icon"
+                style={{ background: color }}
+            >
+                <Icon size={22} />
+            </div>
 
-      <div className="stat-content">
+            <div className="stat-content">
 
-        <p>{title}</p>
+                <p>{title}</p>
 
-        <h2>{value}</h2>
+                <h2>{value}</h2>
 
-      </div>
+            </div>
 
-    </div>
-  );
+        </div>
+    );
 }
 
 export default StatCard;

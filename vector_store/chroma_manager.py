@@ -88,17 +88,16 @@ class ChromaManager:
     def get_document_info(self, filename):
         results = self.collection.get(
             where={"filename": filename},
-            include=["metadatas"]
+            include=["documents", "metadatas"]
         )
 
         if len(results["ids"]) == 0:
             return None
 
-        metadata = results["metadatas"][0]
-
         return {
-            "filename": metadata["filename"],
-            "chunks": len(results["ids"])
+            "filename": filename,
+            "chunks": len(results["ids"]),
+            "documents": results["documents"]
         }
     
     def delete_document(self, filename):

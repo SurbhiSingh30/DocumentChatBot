@@ -1,38 +1,66 @@
+import { useEffect, useState } from "react";
 import { FileText } from "lucide-react";
+import { getDocuments } from "../../services/documentService";
 
-const files = [
-  "Research.pdf",
-  "Resume.pdf",
-  "TTL_Project.docx",
-];
+function UploadHistory({ refresh }) {
+    const [files, setFiles] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-function UploadHistory() {
-  return (
-    <section className="upload-history">
+    const loadHistory = async () => {
+        try {
+            const response = await getDocuments();
 
-      <h2>Recent Uploads</h2>
+            setFiles(response.documents || []);
 
-      <div className="history-list">
+        } catch (error) {
+            console.error("Failed to load upload history:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-        {files.map((file) => (
+    useEffect(() => {
+        loadHistory();
+    }, [refresh]);
 
-          <div
-            key={file}
-            className="history-item"
-          >
+    return (
+        <section className="upload-history">
 
-            <FileText size={20}/>
+            <h2>Recent Uploads</h2>
 
-            <span>{file}</span>
+            {loading ? (
 
-          </div>
+                <p>Loading uploads...</p>
 
-        ))}
+            ) : files.length === 0 ? (
 
-      </div>
+                <p>No documents uploaded yet.</p>
 
-    </section>
-  );
+            ) : (
+
+                <div className="history-list">
+
+                    {files.slice(0, 5).map((file) => (
+
+                        <div
+                            key={file.filename}
+                            className="history-item"
+                        >
+
+                            <FileText size={20} />
+
+                            <span>{file.filename}</span>
+
+                        </div>
+
+                    ))}
+
+                </div>
+
+            )}
+
+        </section>
+    );
 }
 
 export default UploadHistory;

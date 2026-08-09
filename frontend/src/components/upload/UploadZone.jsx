@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { UploadCloud } from "lucide-react";
 import { uploadDocument } from "../../services/documentService";
 
-function UploadZone() {
+function UploadZone({ onUploadSuccess}) {
   const fileInputRef = useRef(null);
 
   const [uploading, setUploading] = useState(false);
@@ -23,6 +23,10 @@ function UploadZone() {
 
       alert(response.message);
 
+      if (onUploadSuccess) {
+        onUploadSuccess();
+      }
+
     } catch (error) {
       console.error(error);
 
@@ -33,6 +37,9 @@ function UploadZone() {
 
     } finally {
       setUploading(false);
+
+        // Allows selecting the same file again
+            event.target.value = "";
     }
   };
 

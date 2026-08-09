@@ -1,54 +1,81 @@
+import { useEffect, useState } from "react";
 import { FileText, MoreVertical } from "lucide-react";
-
-const docs = [
-  {
-    name: "TTL_Project_Report.pdf",
-    date: "Today",
-    size: "2.4 MB",
-  },
-  {
-    name: "Resume.pdf",
-    date: "Yesterday",
-    size: "420 KB",
-  },
-  {
-    name: "Research_Paper.pdf",
-    date: "3 days ago",
-    size: "5.1 MB",
-  },
-];
+import { getDocuments } from "../../services/documentService";
 
 function RecentDocuments() {
-  return (
-    <section className="recent-documents">
+    const [documents, setDocuments] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-      <h2>Recent Documents</h2>
+    useEffect(() => {
+        const loadDocuments = async () => {
+            try {
+                const response = await getDocuments();
 
-      <div className="document-list">
+                setDocuments(response.documents || []);
+            } catch (error) {
+                console.error(
+                    "Failed to load recent documents:",
+                    error
+                );
+            } finally {
+                setLoading(false);
+            }
+        };
 
-        {docs.map((doc) => (
+        loadDocuments();
+    }, []);
 
-          <div className="document-item" key={doc.name}>
+    return (
+        <section className="recent-documents">
 
-            <div className="document-icon">
-              <FileText size={20}/>
-            </div>
+            <h2>Recent Documents</h2>
 
-            <div className="document-info">
-              <h4>{doc.name}</h4>
-              <p>{doc.date} • {doc.size}</p>
-            </div>
+            {loading ? (
 
-            <MoreVertical size={18}/>
+                <p>Loading documents...</p>
 
-          </div>
+            ) : documents.length === 0 ? (
 
-        ))}
+                <p>No documents uploaded yet.</p>
 
-      </div>
+            ) : (
 
-    </section>
-  );
+                <div className="document-list">
+
+                    {documents.slice(0, 5).map((doc) => (
+
+                        <div
+                            className="document-item"
+                            key={doc.document_id || doc.filename}
+                        >
+
+                            <div className="document-icon">
+                                <FileText size={20} />
+                            </div>
+
+                            <div className="document-info">
+
+                                <h4>{doc.filename}</h4>
+
+                                <p>
+                                    {doc.file_type?.toUpperCase()} •{" "}
+                                    {(doc.file_size / 1024).toFixed(1)} KB
+                                </p>
+
+                            </div>
+
+                            <MoreVertical size={18} />
+
+                        </div>
+
+                    ))}
+
+                </div>
+
+            )}
+
+        </section>
+    );
 }
 
 export default RecentDocuments;

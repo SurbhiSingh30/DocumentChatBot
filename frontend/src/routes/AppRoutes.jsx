@@ -11,6 +11,7 @@ import Profile from "../pages/Profile";
 import Settings from "../pages/Settings";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import Summary from "../pages/Summary";
 import NotFound from "../pages/NotFound";
 
 function AppRoutes() {
@@ -32,6 +33,8 @@ function AppRoutes() {
         <Route path="/documents" element={<Documents />} />
 
         <Route path="/upload" element={<Upload />} />
+
+        <Route path="/summary" element={<Summary />} />
 
         <Route path="/profile" element={<Profile />} />
 

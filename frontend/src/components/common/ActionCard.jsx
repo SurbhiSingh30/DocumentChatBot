@@ -1,24 +1,35 @@
 import "./actionCard.css";
 import { ArrowUpRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-function ActionCard({ icon:Icon, title, description }) {
-  return (
-    <div className="action-card">
+function ActionCard({
+    icon: Icon,
+    title,
+    description,
+    route,
+}) {
+    const navigate = useNavigate();
 
-      <div className="card-icon">
-        <Icon size={30}/>
-      </div>
+    return (
+        <div
+            className="action-card"
+            onClick={() => navigate(route)}
+        >
 
-      <h3>{title}</h3>
+            <div className="card-icon">
+                <Icon size={30} />
+            </div>
 
-      <p>{description}</p>
+            <h3>{title}</h3>
 
-      <div className="card-arrow">
-        <ArrowUpRight size={22} />
+            <p>{description}</p>
+
+            <div className="card-arrow">
+                <ArrowUpRight size={22} />
+            </div>
+
         </div>
-
-    </div>
-  );
+    );
 }
 
 export default ActionCard;

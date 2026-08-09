@@ -1,71 +1,191 @@
 import os
 
 from sqlalchemy.orm import Session
+
+from fastapi import (
+    APIRouter,
+    UploadFile,
+    File,
+    HTTPException,
+    Query,
+    Depends
+)
+
 from database.session import get_db
-from auth.dependencies import get_current_user
 from database.models import User
-from fastapi import Depends
+
+from auth.dependencies import get_current_user
+
 from api.schemas.upload import UploadResponse
-from fastapi import APIRouter, UploadFile, File, HTTPException, Query
-from database.crud import create_documents as create_document
+
+from database.crud import (
+    create_document,
+    get_document_by_filename,
+    update_document
+)
 
 from rag.pipeline_instance import pipeline
 
-router = APIRouter(prefix="/documents", tags=["documents"])
+
+router = APIRouter(
+    prefix="/documents",
+    tags=["documents"]
+)
+
 
 UPLOAD_FOLDER = "documents"
 
-@router.post("/upload", response_model=UploadResponse)
+
+@router.post(
+    "/upload",
+    response_model=UploadResponse
+)
 async def upload_document(
-    file: UploadFile = File(...), 
+    file: UploadFile = File(...),
     current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db), 
+    db: Session = Depends(get_db),
     replace: bool = Query(False)
-    ):
+):
 
-        if not (file.filename.endswith(".pdf") or file.filename.endswith(".docx")):
-            raise HTTPException(
-                status_code=400,
-                detail="Only PDF and DOCX files are supported."
-            )
+    # =========================
+    # VALIDATE FILE
+    # =========================
 
-        os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-
-        file_path = os.path.join(
-            UPLOAD_FOLDER,
-            file.filename
+    if not file.filename:
+        raise HTTPException(
+            status_code=400,
+            detail="No file selected."
         )
 
-        with open(file_path, "wb") as buffer:
-            buffer.write(await file.read())
+    allowed_extensions = {
+        ".pdf",
+        ".docx",
+        ".txt"
+    }
 
-        pipeline.set_user(current_user.user_id)
-        
-        if replace:
-            processed = pipeline.replace_document(file_path)
-        else:
-            processed = pipeline.ingest(file_path)
+    extension = os.path.splitext(
+        file.filename
+    )[1].lower()
 
-        if processed:
-            create_document(
-                db=db,
-                user_id=current_user.user_id,
-                filename=file.filename,
-                file_path=file_path,
-                file_type=file.filename.split(".")[-1],
-                file_size=os.path.getsize(file_path),
-                chunks_count=0
-           )
-            return {
-                "success": True,
-                "status": "processed",
-                "message": "Document uploaded and indexed successfully."
-            }
+    if extension not in allowed_extensions:
+        raise HTTPException(
+            status_code=400,
+            detail="Only PDF, DOCX and TXT files are supported."
+        )
 
-        return {
-            "success": True,
-            "status": "already_exists",
-            "message": "Document already exists."
-        }
+    # =========================
+    # CHECK EXISTING DOCUMENT
+    # =========================
 
-    
+    existing_document = get_document_by_filename(
+        db=db,
+        user_id=current_user.user_id,
+        filename=file.filename
+    )
+
+    if existing_document and not replace:
+        raise HTTPException(
+            status_code=409,
+            detail="Document already exists."
+        )
+
+    # =========================
+    # SAVE FILE
+    # =========================
+
+    os.makedirs(
+        UPLOAD_FOLDER,
+        exist_ok=True
+    )
+
+    file_path = os.path.join(
+        UPLOAD_FOLDER,
+        file.filename
+    )
+
+    with open(
+        file_path,
+        "wb"
+    ) as buffer:
+
+        buffer.write(
+            await file.read()
+        )
+
+    # =========================
+    # SET USER FOR RAG
+    # =========================
+
+    pipeline.set_user(
+        current_user.user_id
+    )
+
+    # =========================
+    # PROCESS DOCUMENT
+    # =========================
+
+    if replace and existing_document:
+
+        chunks_count = pipeline.replace_document(
+            file_path
+        )
+
+    else:
+
+        chunks_count = pipeline.ingest(
+            file_path
+        )
+
+    # =========================
+    # SAVE / UPDATE DATABASE
+    # =========================
+
+    if not chunks_count:
+        raise HTTPException(
+            status_code=500,
+            detail="Document could not be processed."
+        )
+
+    file_type = extension.lstrip(".")
+
+    file_size = os.path.getsize(
+        file_path
+    )
+
+    if existing_document and replace:
+
+        update_document(
+            db=db,
+            user_id=current_user.user_id,
+            filename=file.filename,
+            file_path=file_path,
+            file_type=file_type,
+            file_size=file_size,
+            chunks_count=chunks_count
+        )
+
+        message = (
+            "Document replaced and indexed successfully."
+        )
+
+    else:
+
+        create_document(
+            db=db,
+            user_id=current_user.user_id,
+            filename=file.filename,
+            file_path=file_path,
+            file_type=file_type,
+            file_size=file_size,
+            chunks_count=chunks_count
+        )
+
+        message = (
+            "Document uploaded and indexed successfully."
+        )
+
+    return {
+        "success": True,
+        "status": "processed",
+        "message": message
+    }

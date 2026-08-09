@@ -1,28 +1,36 @@
+import { useState } from "react";
 import "./upload.css";
 
 import UploadZone from "../components/upload/UploadZone";
 import UploadHistory from "../components/upload/UploadHistory";
 
 function Upload() {
-  return (
-    <div className="upload-page">
 
-      <div className="upload-header">
+    const [refreshHistory, setRefreshHistory] = useState(0);
 
-        <h1>Upload Documents</h1>
+    const handleUploadSuccess = () => {
+        setRefreshHistory((prev) => prev + 1);
+    };
 
-        <p>
-          Upload your PDFs, DOCX, and TXT files to build your AI knowledge base.
-        </p>
+    return (
+        <div className="upload-page">
 
-      </div>
+            <div className="upload-header">
 
-      <UploadZone />
+                <h1>Upload Documents</h1>
 
-      <UploadHistory />
+                <p>
+                    Upload your PDFs, DOCX, and TXT files to build your AI knowledge base.
+                </p>
 
-    </div>
-  );
+            </div>
+
+            <UploadZone onUploadSuccess={handleUploadSuccess} />
+
+            <UploadHistory refresh={refreshHistory} />
+
+        </div>
+    );
 }
 
 export default Upload;

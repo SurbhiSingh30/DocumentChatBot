@@ -1,0 +1,210 @@
+.summary-page {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.summary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.summary-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    color: #14B8A6;
+}
+
+.summary-title h1 {
+    margin: 0;
+
+    color: white;
+
+    font-size: 42px;
+    font-family: "Sora";
+}
+
+.summary-header p {
+    margin-top: 10px;
+
+    color: #94A3B8;
+
+    font-size: 16px;
+}
+
+
+/* =========================================================
+   SUMMARY CONTROLS
+========================================================= */
+
+.summary-card {
+    display: flex;
+    align-items: flex-end;
+    gap: 20px;
+
+    padding: 28px;
+
+    background: rgba(30, 41, 59, .75);
+
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+
+    border: 1px solid rgba(255, 255, 255, .06);
+
+    border-radius: 22px;
+}
+
+.summary-field {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+
+    flex: 1;
+}
+
+.summary-field label {
+    color: #CBD5E1;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.summary-field select {
+    width: 100%;
+
+    padding: 14px 16px;
+
+    border-radius: 12px;
+
+    border: 1px solid rgba(255, 255, 255, .08);
+
+    background: #172033;
+
+    color: white;
+
+    font-size: 15px;
+
+    outline: none;
+
+    cursor: pointer;
+}
+
+.summary-field select:focus {
+    border-color: #14B8A6;
+}
+
+
+/* =========================================================
+   GENERATE BUTTON
+========================================================= */
+
+.summary-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 9px;
+
+    white-space: nowrap;
+
+    height: 48px;
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.summary-error {
+    color: #F87171;
+
+    margin: 0;
+}
+
+
+/* =========================================================
+   SUMMARY RESULT
+========================================================= */
+
+.summary-result {
+    padding: 30px;
+
+    background: #1E293B;
+
+    border: 1px solid rgba(255, 255, 255, .06);
+
+    border-radius: 22px;
+}
+
+.summary-result-header {
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    padding-bottom: 20px;
+
+    margin-bottom: 22px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, .06);
+
+    color: #14B8A6;
+}
+
+.summary-result-header h2 {
+    margin: 0;
+
+    color: white;
+
+    font-family: "Sora";
+}
+
+.summary-result-header p {
+    margin: 5px 0 0;
+
+    color: #94A3B8;
+
+    font-size: 14px;
+}
+
+.summary-content {
+    color: #CBD5E1;
+
+    font-size: 16px;
+
+    line-height: 1.8;
+
+    white-space: pre-wrap;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 800px) {
+
+    .summary-card {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .summary-button {
+        width: 100%;
+    }
+
+    .summary-title h1 {
+        font-size: 34px;
+    }
+}

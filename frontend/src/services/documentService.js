@@ -89,3 +89,15 @@ export const viewDocument = async (filename) => {
 
     window.open(url, "_blank");
 };
+
+export const generateSummary = async (filename, length = "medium") => {
+    const response = await axios.post(
+        `${API}/documents/${encodeURIComponent(filename)}/summary?length=${length}`,
+        {},
+        {
+            headers: getAuthHeaders(),
+        }
+    );
+
+    return response.data;
+};
