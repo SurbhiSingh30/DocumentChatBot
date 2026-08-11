@@ -3,3 +3,18 @@ __pycache__/
 .env
 *.pyc
 
+# Runtime vector databases
+storage/users/*/chroma_db/
+
+# Uploaded documents
+documents/
+
+# Uploaded profile images
+storage/profile_images/
+
+# Python
+__pycache__/
+*.pyc
+
+# Environment
+.env
