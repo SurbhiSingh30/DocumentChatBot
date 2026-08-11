@@ -9,14 +9,61 @@ class User(Base):
     __tablename__ = "users"
 
     user_id = Column(Integer, primary_key=True)
-    username = Column(String(100), unique=True, nullable=False)
-    email = Column(String(250), unique=True, nullable=False, index=True)
-    password_hash = Column(String(250), nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
 
-    documents = relationship("Document", back_populates="user", cascade="all, delete-orphan")
-    chats = relationship("Chat", back_populates="user", cascade="all, delete-orphan")
+    username = Column(
+        String(100),
+        unique=True,
+        nullable=False
+    )
 
+    email = Column(
+        String(250),
+        unique=True,
+        nullable=False,
+        index=True
+    )
+
+    password_hash = Column(
+        String(250),
+        nullable=False
+    )
+
+    profile_image = Column(
+        String(500),
+        nullable=True
+    )
+
+    organization = Column(
+        String(250),
+        nullable=True
+    )
+
+    role = Column(
+        String(100),
+        nullable=True
+    )
+
+    bio = Column(
+        Text,
+        nullable=True
+    )
+
+    created_at = Column(
+        DateTime,
+        default=datetime.utcnow
+    )
+
+    documents = relationship(
+        "Document",
+        back_populates="user",
+        cascade="all, delete-orphan"
+    )
+
+    chats = relationship(
+        "Chat",
+        back_populates="user",
+        cascade="all, delete-orphan"
+    )
 class Document(Base):
     __tablename__ = "documents"
 
