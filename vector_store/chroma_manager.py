@@ -1,8 +1,10 @@
 import os
 import chromadb
-from chromadb.config import Settings
+
 from config import COLLECTION_NAME
 from utils.logger import logger
+
+
 class ChromaManager:
     """
     Handles creation, storage and retrieval
@@ -10,9 +12,10 @@ class ChromaManager:
     """
 
     def __init__(self, user_id="default"):
+
         self.user_id = user_id
 
-        # Create user-specific database directory
+        # User-specific ChromaDB directory
         self.db_path = os.path.join(
             "storage",
             "users",
@@ -20,27 +23,77 @@ class ChromaManager:
             "chroma_db"
         )
 
-        os.makedirs(self.db_path, exist_ok=True)
+        os.makedirs(
+            self.db_path,
+            exist_ok=True
+        )
 
-        # Create persistent Chroma client
-        self.client = chromadb.PersistentClient(path=self.db_path)
+        # Persistent Chroma client
+        self.client = chromadb.PersistentClient(
+            path=self.db_path
+        )
 
-        # Create (or load) collection
+        # User collection
         self.collection = self.client.get_or_create_collection(
             name=COLLECTION_NAME
         )
 
-    def add_documents(self, chunks, embeddings, filename):
+    # =========================================================
+    # ADD DOCUMENTS
+    # =========================================================
+
+    def add_documents(
+        self,
+        chunks,
+        embeddings,
+        filename,
+        metadata=None
+    ):
+
         ids = []
         metadatas = []
 
         for i, chunk in enumerate(chunks):
-            ids.append(f"{filename}_{i}")
 
-            metadatas.append({
+            ids.append(
+                f"{filename}_{i}"
+            )
+
+            chunk_metadata = {
                 "filename": filename,
                 "chunk_number": i
-            })
+            }
+
+            # Add source location metadata
+            if metadata and i < len(metadata):
+
+                chunk_metadata.update({
+                    "location_type": metadata[i].get(
+                        "location_type",
+                        "chunk"
+                    ),
+                    "location": str(
+                        metadata[i].get(
+                            "location",
+                            i + 1
+                        )
+                    )
+                })
+
+            else:
+
+                chunk_metadata.update({
+                    "location_type": "chunk",
+                    "location": str(i + 1)
+                })
+
+            metadatas.append(
+                chunk_metadata
+            )
+
+        print("\n===== STORING METADATA =====")
+        print(metadatas)
+        print("============================\n")
 
         self.collection.add(
             ids=ids,
@@ -49,25 +102,34 @@ class ChromaManager:
             metadatas=metadatas
         )
 
-        logger.info(f"\n Stored {len(chunks)} chunks in ChromaDB.")
-
-    def search(self, query_embedding, top_k=4):
-        results = self.collection.query(
-            query_embeddings=[query_embedding],
-            n_results=top_k,
-            include=["documents", "metadatas", "distances"]
+        logger.info(
+            "Stored %d chunks from '%s' in ChromaDB.",
+            len(chunks),
+            filename
         )
 
-        return results
-    
+    # =========================================================
+    # DOCUMENT EXISTS
+    # =========================================================
+
     def document_exists(self, filename):
+
         results = self.collection.get(
-            where={"filename": filename}
+            where={
+                "filename": filename
+            }
         )
 
-        return len(results["ids"]) > 0
-    
+        return len(
+            results["ids"]
+        ) > 0
+
+    # =========================================================
+    # LIST DOCUMENTS
+    # =========================================================
+
     def list_documents(self):
+
         results = self.collection.get(
             include=["metadatas"]
         )
@@ -75,20 +137,60 @@ class ChromaManager:
         filenames = set()
 
         for metadata in results["metadatas"]:
-            filenames.add(metadata["filename"])
 
-        return sorted(list(filenames))
-    
-    def search_documents(self, query):
-        documents = self.list_documents()
+            if metadata and "filename" in metadata:
+                filenames.add(
+                    metadata["filename"]
+                )
 
-        return [doc for doc in documents
-            if query.lower() in doc.lower()]
-        
+        return sorted(
+            list(filenames)
+        )
+
+    # =========================================================
+    # SEARCH DOCUMENT NAMES
+    # =========================================================
+
+    def search(
+    self,
+    query_embedding,
+    top_k=4,
+    filename=None
+    ):
+        where_filter = None
+
+        if filename:
+            where_filter = {
+                "filename": filename
+            }
+
+        results = self.collection.query(
+            query_embeddings=[query_embedding],
+            n_results=top_k,
+            where=where_filter,
+            include=[
+                "documents",
+                "metadatas",
+                "distances"
+            ]
+        )
+
+        return results
+
+    # =========================================================
+    # DOCUMENT INFO
+    # =========================================================
+
     def get_document_info(self, filename):
+
         results = self.collection.get(
-            where={"filename": filename},
-            include=["documents", "metadatas"]
+            where={
+                "filename": filename
+            },
+            include=[
+                "documents",
+                "metadatas"
+            ]
         )
 
         if len(results["ids"]) == 0:
@@ -97,12 +199,20 @@ class ChromaManager:
         return {
             "filename": filename,
             "chunks": len(results["ids"]),
-            "documents": results["documents"]
+            "documents": results["documents"],
+            "metadatas": results["metadatas"]
         }
-    
+
+    # =========================================================
+    # DELETE DOCUMENT
+    # =========================================================
+
     def delete_document(self, filename):
+
         results = self.collection.get(
-            where={"filename": filename}
+            where={
+                "filename": filename
+            }
         )
 
         if len(results["ids"]) == 0:
@@ -112,8 +222,9 @@ class ChromaManager:
             ids=results["ids"]
         )
 
+        logger.info(
+            "Deleted document '%s' from ChromaDB.",
+            filename
+        )
+
         return True
-    
-    
-        
-    

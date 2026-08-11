@@ -3,10 +3,20 @@ from docx import Document
 
 def extract_text_from_docx(file_path):
     document = Document(file_path)
-    text = []
 
-    for paragraph in document.paragraphs:
-        if paragraph.text.strip():
-            text.append(paragraph.text)
+    paragraphs = []
 
-    return "\n".join(text)
+    for paragraph_number, paragraph in enumerate(
+        document.paragraphs,
+        start=1
+    ):
+        text = paragraph.text.strip()
+
+        if text:
+            paragraphs.append({
+                "text": text,
+                "location_type": "paragraph",
+                "location": paragraph_number
+            })
+
+    return paragraphs
