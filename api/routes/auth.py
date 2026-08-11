@@ -3,7 +3,8 @@ from  fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database.session import get_db
 from api.schemas.auth import UserRegister
-from auth.auth import register_user, login_user
+from auth.auth import register_user, login_user, verify_password, hash_password
+
 
 router = APIRouter(prefix="/auth", tags=["Authentication"] )
 
@@ -36,3 +37,19 @@ def login(
         "access_token": token,
         "token_type": "bearer"
     }
+
+def change_password(db, user, current_password, new_password):
+
+    if not verify_password(
+        current_password,
+        user.password_hash
+        ):
+            return False
+    user.password_hash = hash_password(new_password)
+                    
+    db.commit()
+    db.refresh(user)
+                            
+    return True                    
+            
+                    

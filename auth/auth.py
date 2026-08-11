@@ -51,3 +51,22 @@ def login_user(db, email, password):
     )
 
     return token
+
+def change_password(db, user, current_password, new_password):
+
+    # Verify current password
+    if not verify_password(
+        current_password,
+        user.password_hash
+    ):
+        return False
+
+    # Hash new password
+    user.password_hash = hash_password(
+        new_password
+    )
+
+    db.commit()
+    db.refresh(user)
+
+    return True
