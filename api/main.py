@@ -1,11 +1,14 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from api.routes.profile import router as profile_router
 from fastapi.openapi.utils import get_openapi
 from api.routes.upload import router as upload_router
 from api.routes.chat import router as chat_router
 from api.routes.documents import router as documents_router
 from api.routes.auth import router as auth_router
 from api.routes.summary import router as summary_router
+from api.routes.settings import router as settings_router
+from fastapi.staticfiles import StaticFiles
 from api.handlers.exception_handler import (
     value_error_handler,
     generic_exception_handler
@@ -23,6 +26,12 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+)
+
+app.mount(
+    "/profile-images",
+    StaticFiles(directory="storage/profile_images"),
+    name="profile-images"
 )
 
 
@@ -54,12 +63,14 @@ app.add_exception_handler(Exception, generic_exception_handler)
 
 app.include_router(auth_router)
 app.include_router(upload_router)
-app.include_router(chat_router)
+app.include_router(chat_router, prefix="/chat")
 app.include_router(documents_router)
 app.include_router(summary_router)
+app.include_router(profile_router)
+app.include_router(settings_router)
 
 @app.get("/")
 def home():
     return {
-        "message": "Document ChatBot API is running."
+        "message": "STRATUM API is running."
     }
