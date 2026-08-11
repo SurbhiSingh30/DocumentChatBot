@@ -1,23 +1,165 @@
-.settings-page{
 
-    display:flex;
-
-    flex-direction:column;
-
-    gap:24px;
+.settings-page {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
 }
 
-.setting-card{
+.setting-card {
+    background: #1E293B;
+    padding: 28px;
+    border-radius: 20px;
 
-    background:#1E293B;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
 
-    padding:28px;
+    gap: 30px;
+}
 
-    border-radius:20px;
+.setting-card h3 {
+    margin: 0 0 8px;
+    font-size: 18px;
+}
 
-    display:flex;
+.setting-card p {
+    margin: 0;
+    color: #94A3B8;
+    font-size: 14px;
+}
 
-    justify-content:space-between;
 
-    align-items:center;
+/* =========================
+   SECURITY
+========================= */
+
+.security-card {
+    flex-direction: column;
+}
+
+.setting-header {
+    width: 100%;
+}
+
+.password-form {
+    width: 100%;
+    max-width: 600px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 14px;
+    color: #CBD5E1;
+}
+
+.form-group input {
+    padding: 13px 15px;
+
+    border: 1px solid #334155;
+    border-radius: 12px;
+
+    background: #0F172A;
+    color: white;
+
+    outline: none;
+    font-size: 14px;
+}
+
+.form-group input:focus {
+    border-color: #14B8A6;
+}
+
+.form-group input::placeholder {
+    color: #64748B;
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+.primary-btn,
+.secondary-btn,
+.danger-btn {
+    padding: 12px 18px;
+
+    border-radius: 12px;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    cursor: pointer;
+    border: none;
+}
+
+.primary-btn {
+    background: #14B8A6;
+    color: white;
+}
+
+.primary-btn:hover {
+    background: #0D9488;
+}
+
+.primary-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.secondary-btn {
+    background: #334155;
+    color: #E2E8F0;
+}
+
+.secondary-btn:hover {
+    background: #475569;
+}
+
+.danger-card {
+    border: 1px solid #7F1D1D;
+}
+
+.danger-btn {
+    background: #7F1D1D;
+    color: #FEE2E2;
+}
+
+.danger-btn:hover {
+    background: #991B1B;
+}
+
+
+/* =========================
+   MESSAGES
+========================= */
+
+.settings-error {
+    padding: 12px 14px;
+
+    border-radius: 10px;
+
+    background: #450A0A;
+    color: #FCA5A5;
+
+    font-size: 14px;
+}
+
+.settings-success {
+    padding: 12px 14px;
+
+    border-radius: 10px;
+
+    background: #064E3B;
+    color: #6EE7B7;
+
+    font-size: 14px;
 }
