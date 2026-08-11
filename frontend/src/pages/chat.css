@@ -92,3 +92,18 @@
     color:white;
     cursor:pointer;
 }
+
+.profile-success {
+    color: #22c55e;
+    margin: 0;
+}
+
+.profile-error {
+    color: #ef4444;
+    margin: 0;
+}
+
+.profile-info input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
