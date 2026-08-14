@@ -1,86 +1,125 @@
 import {
-  LayoutDashboard,
-  MessageSquare,
-  Files,
-  Upload,
-  User,
-  Settings,
+    LayoutDashboard,
+    MessageSquare,
+    Files,
+    Upload,
+    User,
+    Settings,
+    PanelLeftClose,
+    PanelLeftOpen,
+    Sun,
+    Moon,
 } from "lucide-react";
-
-import {
-  PanelLeftClose,
-  PanelLeftOpen,
-} from "lucide-react";
-
+import logo from "../../assets/logo/Stratum.png";
 import { NavLink } from "react-router-dom";
+import useTheme from "../../hooks/useTheme";
 
 function Sidebar({ collapsed, setCollapsed }) {
+    const { theme, toggleTheme } = useTheme();
 
-  return (
-    <aside className={`sidebar ${collapsed ? "collapsed" : ""}`}>
-      <div className="sidebar-top">
+    const handleCollapse = () => {
+        setCollapsed((current) => !current);
+    };
 
-      <button
-        className="collapse-btn"
-        onClick={() => setCollapsed(!collapsed)}
-       >
-       {collapsed ? (
-      <PanelLeftOpen size={22} />
-        ) : (
-        <PanelLeftClose size={22} />
-         )}
-       </button>
+    return (
+        <aside
+            className={`sidebar ${collapsed ? "collapsed" : ""}`}
+            aria-label="Main navigation"
+        >
+            {/* BRAND */}
+           <div className="brand-section">
 
-      </div>
-      
-      <div className={`brand-section ${collapsed ? "hidden" : ""}`}>
+                <img
+                    src={logo}
+                    alt="Stratum"
+                    className="sidebar-logo"
+                />
 
-        <h2>STRATUM</h2>
+                {!collapsed && (
+                    <div className="brand-text">
+                        <h2>STRATUM</h2>
+                        <p>AI Document Intelligence</p>
+                    </div>
+                )}
 
-        <p>AI Document Intelligence</p>
+            </div>
 
-      </div>
+            {/* COLLAPSE */}
+            <div className="sidebar-top">
+                <button
+                    type="button"
+                    className="collapse-btn"
+                    onClick={handleCollapse}
+                    aria-label={
+                        collapsed
+                            ? "Expand sidebar"
+                            : "Collapse sidebar"
+                    }
+                    title={
+                        collapsed
+                            ? "Expand sidebar"
+                            : "Collapse sidebar"
+                    }
+                >
+                    {collapsed ? (
+                        <PanelLeftOpen size={21} />
+                    ) : (
+                        <PanelLeftClose size={21} />
+                    )}
+                </button>
+            </div>
 
-      <nav>
-        
-        <NavLink to="/">
-           <LayoutDashboard size={20}/>
-           <span>Dashboard</span>
-        </NavLink>
+            {/* MAIN NAVIGATION */}
+            <nav className="sidebar-nav">
+                <NavLink to="/" end>
+                    <LayoutDashboard size={20} />
+                    <span>Dashboard</span>
+                </NavLink>
+            </nav>
 
-        <NavLink to="/chat">
-          <MessageSquare size={20} />
-          <span>Chat</span>
-        </NavLink>
+            {/* BOTTOM NAVIGATION */}
+            <div className="sidebar-bottom">
+                <NavLink to="/profile">
+                    <User size={20} />
+                    <span>Profile</span>
+                </NavLink>
 
-        <NavLink to="/documents">
-          <Files size={20} />
-          <span>Documents</span>
-        </NavLink>
+                <NavLink to="/settings">
+                    <Settings size={20} />
+                    <span>Settings</span>
+                </NavLink>
 
-        <NavLink to="/upload" >
-          <Upload size={20} />
-          <span>Upload</span>
-        </NavLink>
+                {/* THEME TOGGLE */}
+                <button
+                    type="button"
+                    className="theme-toggle"
+                    onClick={toggleTheme}
+                    aria-label={
+                        theme === "dark"
+                            ? "Switch to light mode"
+                            : "Switch to dark mode"
+                    }
+                    title={
+                        theme === "dark"
+                            ? "Light mode"
+                            : "Dark mode"
+                    }
+                >
+                    {theme === "dark" ? (
+                        <Sun size={20} />
+                    ) : (
+                        <Moon size={20} />
+                    )}
 
-      </nav>
-
-      <div className="bottom-nav">
-
-        <NavLink to="/profile">
-          <User size={20} />
-          <span>Profile</span>
-        </NavLink>
-
-        <NavLink to="/settings">
-          <Settings size={20} />
-          <span>Settings</span>
-        </NavLink>
-
-      </div>
-
-    </aside>
-  );
+                    <span>
+                        {theme === "dark"
+                            ? "Light mode"
+                            : "Dark mode"}
+                    </span>
+                </button>
+            </div>
+        </aside>
+    );
 }
 
 export default Sidebar;

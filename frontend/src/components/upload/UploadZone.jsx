@@ -1,77 +1,121 @@
 import { useRef, useState } from "react";
-import { UploadCloud } from "lucide-react";
+import { UploadCloud, FileUp } from "lucide-react";
+
 import { uploadDocument } from "../../services/documentService";
 
-function UploadZone({ onUploadSuccess}) {
-  const fileInputRef = useRef(null);
+function UploadZone({ onUploadSuccess }) {
+    const fileInputRef = useRef(null);
 
-  const [uploading, setUploading] = useState(false);
+    const [uploading, setUploading] = useState(false);
 
-  const handleChooseFile = () => {
-    fileInputRef.current.click();
-  };
+    const handleChooseFile = () => {
+        if (!uploading) {
+            fileInputRef.current?.click();
+        }
+    };
 
-  const handleUpload = async (event) => {
-    const file = event.target.files[0];
+    const handleUpload = async (event) => {
+        const file = event.target.files?.[0];
 
-    if (!file) return;
+        if (!file) {
+            return;
+        }
 
-    try {
-      setUploading(true);
+        try {
+            setUploading(true);
 
-      const response = await uploadDocument(file);
+            const response = await uploadDocument(file);
 
-      alert(response.message);
+            alert(response.message);
 
-      if (onUploadSuccess) {
-        onUploadSuccess();
-      }
+            if (onUploadSuccess) {
+                onUploadSuccess();
+            }
+        } catch (error) {
+            console.error("Upload failed:", error);
 
-    } catch (error) {
-      console.error(error);
+            alert(
+                error.response?.data?.detail ||
+                "Upload failed."
+            );
+        } finally {
+            setUploading(false);
 
-      alert(
-        error.response?.data?.detail ||
-        "Upload failed."
-      );
-
-    } finally {
-      setUploading(false);
-
-        // Allows selecting the same file again
+            // Allows the same file to be selected again.
             event.target.value = "";
-    }
-  };
+        }
+    };
 
-  return (
-    <div className="upload-zone">
+    return (
+        <section className="upload-zone">
 
-      <UploadCloud size={70} />
+            {/* Decorative glow */}
+            <div
+                className="upload-zone-glow"
+                aria-hidden="true"
+            />
 
-      <h2>Drag & Drop Files</h2>
+            {/* Upload icon */}
+            <div className="upload-icon">
+                {uploading ? (
+                    <FileUp
+                        size={38}
+                        strokeWidth={1.7}
+                    />
+                ) : (
+                    <UploadCloud
+                        size={38}
+                        strokeWidth={1.7}
+                    />
+                )}
+            </div>
 
-      <p>
-        Upload PDF, DOCX or TXT files
-      </p>
+            {/* Content */}
+            <div className="upload-zone-content">
 
-      <button
-        className="primary-btn"
-        onClick={handleChooseFile}
-        disabled={uploading}
-      >
-        {uploading ? "Uploading..." : "Choose Files"}
-      </button>
+                <h2>
+                    {uploading
+                        ? "Uploading your document..."
+                        : "Upload your documents"}
+                </h2>
 
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept=".pdf,.docx,.txt"
-        style={{ display: "none" }}
-        onChange={handleUpload}
-      />
+                <p>
+                    {uploading
+                        ? "Please wait while Stratum processes your file."
+                        : "PDF, DOCX and TXT files are supported."}
+                </p>
 
-    </div>
-  );
+            </div>
+
+            {/* Action */}
+            <button
+                type="button"
+                className="primary-btn upload-button"
+                onClick={handleChooseFile}
+                disabled={uploading}
+            >
+                {uploading
+                    ? "Uploading..."
+                    : "Choose Files"}
+            </button>
+
+            {/* Hidden file input */}
+            <input
+                ref={fileInputRef}
+                type="file"
+                accept=".pdf,.docx,.txt"
+                onChange={handleUpload}
+                hidden
+                disabled={uploading}
+            />
+
+            {/* Supporting text */}
+            <span className="upload-zone-hint">
+                Maximum supported formats: PDF · DOCX · TXT
+            </span>
+
+        </section>
+    );
 }
 
 export default UploadZone;

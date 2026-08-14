@@ -1,37 +1,119 @@
+/* =========================================================
+   STRATUM — SETTINGS PAGE
+   ========================================================= */
+
+
+/* =========================================================
+   PAGE
+   ========================================================= */
 
 .settings-page {
     display: flex;
     flex-direction: column;
+
     gap: 24px;
+
+    width: 100%;
+    max-width: 1000px;
+
+    margin: 0 auto;
 }
 
+
+/* =========================================================
+   SETTING CARD — GLASS
+   ========================================================= */
+
 .setting-card {
-    background: #1E293B;
-    padding: 28px;
-    border-radius: 20px;
+    position: relative;
 
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
 
     gap: 30px;
+
+    padding: 28px;
+
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--glass-bg),
+            rgba(20, 184, 166, 0.025)
+        );
+
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+
+    box-shadow: var(--shadow-glass);
+
+    overflow: hidden;
+
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.setting-card::before {
+    content: "";
+
+    position: absolute;
+
+    width: 240px;
+    height: 240px;
+
+    top: -160px;
+    right: -80px;
+
+    border-radius: 50%;
+
+    background: rgba(20, 184, 166, 0.06);
+
+    filter: blur(75px);
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   SETTING CONTENT
+   ========================================================= */
+
+.setting-card > * {
+    position: relative;
+    z-index: 1;
 }
 
 .setting-card h3 {
-    margin: 0 0 8px;
+    margin: 0 0 7px;
+
+    font-family: "Sora", sans-serif;
+
     font-size: 18px;
+    font-weight: 600;
+
+    color: var(--text-primary);
 }
 
 .setting-card p {
+    max-width: 650px;
+
     margin: 0;
-    color: #94A3B8;
+
+    color: var(--text-secondary);
+
     font-size: 14px;
+    line-height: 1.65;
 }
 
 
-/* =========================
+/* =========================================================
    SECURITY
-========================= */
+   ========================================================= */
 
 .security-card {
     flex-direction: column;
@@ -41,125 +123,255 @@
     width: 100%;
 }
 
+
+/* =========================================================
+   PASSWORD FORM
+   ========================================================= */
+
 .password-form {
     width: 100%;
     max-width: 600px;
 
     display: flex;
     flex-direction: column;
+
     gap: 18px;
 }
+
+
+/* =========================================================
+   FORM GROUP
+   ========================================================= */
 
 .form-group {
     display: flex;
     flex-direction: column;
+
     gap: 8px;
 }
 
 .form-group label {
-    font-size: 14px;
-    color: #CBD5E1;
+    color: var(--text-secondary);
+
+    font-size: 13px;
+    font-weight: 600;
 }
+
+
+/* =========================================================
+   INPUTS
+   ========================================================= */
 
 .form-group input {
+    width: 100%;
+
     padding: 13px 15px;
 
-    border: 1px solid #334155;
-    border-radius: 12px;
+    border: 1px solid var(--glass-border);
+    border-radius: 13px;
 
-    background: #0F172A;
-    color: white;
+    background: rgba(15, 23, 42, 0.08);
+
+    color: var(--text-primary);
 
     outline: none;
+
+    font-family: inherit;
     font-size: 14px;
+
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
-.form-group input:focus {
-    border-color: #14B8A6;
+[data-theme="dark"] .form-group input {
+    background: rgba(15, 23, 42, 0.45);
+}
+
+[data-theme="light"] .form-group input {
+    background: rgba(255, 255, 255, 0.50);
 }
 
 .form-group input::placeholder {
-    color: #64748B;
+    color: var(--text-muted);
+}
+
+.form-group input:focus {
+    border-color: rgba(20, 184, 166, 0.55);
+
+    box-shadow:
+        0 0 0 3px rgba(20, 184, 166, 0.08);
 }
 
 
-/* =========================
+/* =========================================================
    BUTTONS
-========================= */
+   ========================================================= */
 
 .primary-btn,
 .secondary-btn,
 .danger-btn {
-    padding: 12px 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 11px 18px;
 
     border-radius: 12px;
 
-    font-size: 14px;
-    font-weight: 500;
+    font-family: inherit;
+
+    font-size: 13px;
+    font-weight: 600;
 
     cursor: pointer;
-    border: none;
+
+    transition:
+        transform 0.2s ease,
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
 }
 
+
+/* =========================================================
+   PRIMARY
+   ========================================================= */
+
 .primary-btn {
-    background: #14B8A6;
-    color: white;
+    border: 1px solid rgba(20, 184, 166, 0.25);
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--brand-accent),
+            var(--brand-primary)
+        );
+
+    color: #ffffff;
+
+    box-shadow:
+        0 8px 22px rgba(20, 184, 166, 0.15);
 }
 
 .primary-btn:hover {
-    background: #0D9488;
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 12px 28px rgba(20, 184, 166, 0.22);
 }
 
 .primary-btn:disabled {
-    opacity: 0.6;
+    opacity: 0.55;
+
     cursor: not-allowed;
+
+    transform: none;
+
+    box-shadow: none;
 }
 
+
+/* =========================================================
+   SECONDARY
+   ========================================================= */
+
 .secondary-btn {
-    background: #334155;
-    color: #E2E8F0;
+    border: 1px solid var(--glass-border);
+
+    background: var(--surface);
+
+    color: var(--text-primary);
 }
 
 .secondary-btn:hover {
-    background: #475569;
+    background: var(--surface-hover);
+
+    transform: translateY(-1px);
 }
 
+
+/* =========================================================
+   DANGER
+   ========================================================= */
+
 .danger-card {
-    border: 1px solid #7F1D1D;
+    border-color: rgba(239, 68, 68, 0.18);
 }
 
 .danger-btn {
-    background: #7F1D1D;
-    color: #FEE2E2;
+    border: 1px solid rgba(239, 68, 68, 0.25);
+
+    background: rgba(239, 68, 68, 0.07);
+
+    color: #EF4444;
 }
 
 .danger-btn:hover {
-    background: #991B1B;
+    background: rgba(239, 68, 68, 0.13);
+
+    transform: translateY(-1px);
 }
 
 
-/* =========================
+/* =========================================================
    MESSAGES
-========================= */
+   ========================================================= */
 
-.settings-error {
-    padding: 12px 14px;
-
-    border-radius: 10px;
-
-    background: #450A0A;
-    color: #FCA5A5;
-
-    font-size: 14px;
-}
-
+.settings-error,
 .settings-success {
     padding: 12px 14px;
 
-    border-radius: 10px;
+    border-radius: 12px;
 
-    background: #064E3B;
-    color: #6EE7B7;
+    font-size: 13px;
+    line-height: 1.5;
+}
 
-    font-size: 14px;
+.settings-error {
+    border: 1px solid rgba(239, 68, 68, 0.16);
+
+    background: rgba(239, 68, 68, 0.07);
+
+    color: #EF4444;
+}
+
+.settings-success {
+    border: 1px solid rgba(34, 197, 94, 0.16);
+
+    background: rgba(34, 197, 94, 0.07);
+
+    color: #22C55E;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    .settings-page {
+        gap: 18px;
+    }
+
+    .setting-card {
+        flex-direction: column;
+
+        padding: 22px;
+
+        border-radius: 20px;
+    }
+
+    .setting-card button {
+        width: 100%;
+    }
+
+    .password-form {
+        max-width: 100%;
+    }
 }

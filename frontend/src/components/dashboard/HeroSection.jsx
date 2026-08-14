@@ -1,47 +1,50 @@
-import { useNavigate } from "react-router-dom";
-
+import { useEffect, useState } from "react";
+import { getProfile } from "../../services/profileService";
+import {Sparkles} from "lucide-react";
 function HeroSection() {
-    const navigate = useNavigate();
+    const [username, setUsername] = useState("Amigo");
+
+    useEffect(() => {
+        getProfile()
+            .then((data) => {
+                setUsername(data?.username?.trim() || "Amigo");
+            })
+            .catch((error) => {
+                console.error("Failed to load profile:", error);
+                setUsername("Amigo");
+            });
+    }, []);
 
     return (
         <section className="hero-section">
 
-            <div className="hero-glow"></div>
+            <div
+                className="hero-glow"
+                aria-hidden="true"
+            />
 
             <div className="hero-content">
 
                 <div className="hero-badge">
-                    ✨ AI Document Intelligence Platform
+                    <span aria-hidden="true">
+                        <Sparkles />
+                    </span>
+                    <span>
+                        AI Document Intelligence Platform
+                    </span>
                 </div>
 
                 <h1>
-                    Good Morning,
-                    <span> Surbhi</span>
+                    Ready when you are
+                    <span> {username}</span>
                 </h1>
 
                 <p>
-                    Welcome back to <strong>Stratum</strong>.
-                    Organize, search, analyze and chat with your documents
-                    using enterprise-grade AI.
+                    Ready when you are,{" "}
+                    <strong>{username}</strong>.
+                    Your documents, knowledge base and AI
+                    workspace are ready to go.
                 </p>
-
-                <div className="hero-buttons">
-
-                    <button
-                        className="primary-btn"
-                        onClick={() => navigate("/upload")}
-                    >
-                        Upload Documents
-                    </button>
-
-                    <button
-                        className="secondary-btn"
-                        onClick={() => navigate("/chat")}
-                    >
-                        Start Chat
-                    </button>
-
-                </div>
 
             </div>
 

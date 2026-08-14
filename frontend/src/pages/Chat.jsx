@@ -90,51 +90,70 @@ function Chat() {
     };
 
     return (
-        <div className="chat-page">
+    <div className="chat-page">
 
-            <ChatSidebar />
+        <ChatSidebar />
 
-            <div className="chat-main">
+        <div className="chat-main">
 
-                <div className="document-selector">
+            {/* DOCUMENT SELECTOR */}
+            <div className="document-selector">
 
-                    <label>Select Document</label>
+                <div className="document-selector-header">
+                    <label htmlFor="document-select">
+                        Select Document
+                    </label>
 
-                    {loadingDocuments ? (
-                        <span>Loading documents...</span>
-                    ) : documents.length === 0 ? (
-                        <span>No documents uploaded yet.</span>
-                    ) : (
-                        <select
-                            value={selectedDocument}
-                            onChange={(e) => {
-                                setSelectedDocument(e.target.value);
-                                setMessages([]);
-                            }}
-                        >
-                            {documents.map((doc) => (
-                                <option
-                                    key={doc.filename}
-                                    value={doc.filename}
-                                >
-                                    {doc.filename}
-                                </option>
-                            ))}
-                        </select>
-                    )}
-
+                    <span>
+                        {loadingDocuments
+                            ? "Loading documents..."
+                            : documents.length === 0
+                                ? "No documents uploaded yet."
+                                : `${documents.length} document${documents.length > 1 ? "s" : ""} available`
+                        }
+                    </span>
                 </div>
 
-                <ChatWindow
-                    messages={messages}
-                    onSend={handleSend}
-                    loading={loading}
-                />
+                {loadingDocuments ? (
+                    <div className="document-selector-status">
+                        Loading documents...
+                    </div>
+                ) : documents.length === 0 ? (
+                    <div className="document-selector-status empty">
+                        No documents uploaded yet.
+                    </div>
+                ) : (
+                    <select
+                        id="document-select"
+                        value={selectedDocument}
+                        onChange={(e) => {
+                            setSelectedDocument(e.target.value);
+                            setMessages([]);
+                        }}
+                    >
+                        {documents.map((doc) => (
+                            <option
+                                key={doc.filename}
+                                value={doc.filename}
+                            >
+                                {doc.filename}
+                            </option>
+                        ))}
+                    </select>
+                )}
 
             </div>
 
+            <ChatWindow
+                messages={messages}
+                onSend={handleSend}
+                loading={loading}
+            />
+
         </div>
-    );
+
+    </div>
+);
 }
 
 export default Chat;

@@ -1,44 +1,258 @@
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
+@import "./variables.css";
+
+/* =========================================================
+   STRATUM — GLOBAL STYLES
+   ========================================================= */
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-body{
 
-font-family:Inter,sora;
+/* =========================================================
+   HTML
+   ========================================================= */
 
-background:var(--dark-bg);
+html {
+    min-height: 100%;
+    font-family: "Inter", sans-serif;
 
-color:var(--text-light);
+    background: var(--bg-primary);
+    color: var(--text-primary);
 
-overflow:hidden;
-
+    transition:
+        background-color 0.25s ease,
+        color 0.25s ease;
 }
 
-body{
 
-background:#0F172A;
+/* =========================================================
+   BODY
+   ========================================================= */
 
-background-image:url("../assets/patterns/pattern.svg");
+body {
+    min-height: 100vh;
 
-background-repeat:repeat;
+    font-family: "Inter", sans-serif;
 
-background-size:550px;
+    background:
+        radial-gradient(
+            circle at 85% 10%,
+            rgba(20, 184, 166, 0.055),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 10% 85%,
+            rgba(0, 131, 120, 0.045),
+            transparent 28%
+        ),
+        var(--bg-primary);
 
-background-attachment:fixed;
+    color: var(--text-primary);
 
+    overflow: hidden;
+
+    transition:
+        background-color 0.25s ease,
+        color 0.25s ease;
 }
 
-h1{
-    font-family: "Sora";
+
+/* =========================================================
+   APP ROOT
+   ========================================================= */
+
+#root {
+    min-height: 100vh;
+    height: 100vh;
+}
+
+
+/* =========================================================
+   TYPOGRAPHY
+   ========================================================= */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Sora", sans-serif;
+    color: var(--text-primary);
+}
+
+h1 {
     font-size: 42px;
     font-weight: 700;
+    line-height: 1.15;
     margin-bottom: 8px;
 }
 
-p{
-    font-family: "Inter";
-    color: #94A3B8;
-    font-size: 18px;
+h2 {
+    font-size: 28px;
+    font-weight: 650;
+}
+
+h3 {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+h4 {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+p {
+    font-family: "Inter", sans-serif;
+    color: var(--text-secondary);
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   LINKS
+   ========================================================= */
+
+a {
+    color: inherit;
+}
+
+
+/* =========================================================
+   BUTTONS / FORM ELEMENTS
+   ========================================================= */
+
+button,
+input,
+textarea,
+select {
+    font-family: inherit;
+}
+
+button {
+    color: inherit;
+}
+
+
+/* =========================================================
+   INPUT PLACEHOLDER
+   ========================================================= */
+
+input::placeholder,
+textarea::placeholder {
+    color: var(--text-muted);
+}
+
+
+/* =========================================================
+   FOCUS
+   ========================================================= */
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+a:focus-visible {
+    outline: 2px solid var(--brand-accent);
+    outline-offset: 3px;
+}
+
+
+/* =========================================================
+   SELECTION
+   ========================================================= */
+
+::selection {
+    background: var(--brand-accent);
+    color: #FFFFFF;
+}
+
+
+/* =========================================================
+   SCROLLBAR
+   Chrome / Edge / Safari compatible
+   ========================================================= */
+
+::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-strong);
+    border-radius: var(--radius-pill);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--brand-primary);
+}
+
+
+/* =========================================================
+   GLASS UTILITY
+   ========================================================= */
+
+.glass {
+    background: var(--glass-bg);
+
+    border: 1px solid var(--glass-border);
+
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    backdrop-filter: blur(var(--glass-blur));
+    
+
+    box-shadow: var(--shadow-glass);
+}
+
+
+/* =========================================================
+   THEME TRANSITIONS
+   ========================================================= */
+
+html,
+body,
+button,
+input,
+textarea,
+select,
+.glass {
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+/* =========================================================
+   RESPONSIVE TYPOGRAPHY
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    h1 {
+        font-size: 34px;
+    }
+
+    h2 {
+        font-size: 24px;
+    }
+
+    p {
+        font-size: 15px;
+    }
 }

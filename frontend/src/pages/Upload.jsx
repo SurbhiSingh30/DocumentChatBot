@@ -5,31 +5,57 @@ import UploadZone from "../components/upload/UploadZone";
 import UploadHistory from "../components/upload/UploadHistory";
 
 function Upload() {
-
     const [refreshHistory, setRefreshHistory] = useState(0);
 
     const handleUploadSuccess = () => {
-        setRefreshHistory((prev) => prev + 1);
+        setRefreshHistory((previous) => previous + 1);
     };
 
     return (
-        <div className="upload-page">
+        <main className="upload-page">
 
-            <div className="upload-header">
+            {/* =================================================
+                HEADER
+            ================================================= */}
 
-                <h1>Upload Documents</h1>
+            <header className="upload-header">
 
-                <p>
-                    Upload your PDFs, DOCX, and TXT files to build your AI knowledge base.
-                </p>
+                <div className="upload-header-content">
 
-            </div>
+                    <h1>Upload Documents</h1>
 
-            <UploadZone onUploadSuccess={handleUploadSuccess} />
+                    <p>
+                        Upload your PDFs, DOCX, and TXT files
+                        to build your AI knowledge base.
+                    </p>
 
-            <UploadHistory refresh={refreshHistory} />
+                </div>
 
-        </div>
+            </header>
+
+
+            {/* =================================================
+                UPLOAD ZONE
+            ================================================= */}
+
+            <section className="upload-section">
+                <UploadZone
+                    onUploadSuccess={handleUploadSuccess}
+                />
+            </section>
+
+
+            {/* =================================================
+                UPLOAD HISTORY
+            ================================================= */}
+
+            <section className="upload-history-section">
+                <UploadHistory
+                    refresh={refreshHistory}
+                />
+            </section>
+
+        </main>
     );
 }
 

@@ -10,25 +10,45 @@ function ActionCard({
 }) {
     const navigate = useNavigate();
 
+    const handleNavigate = () => {
+        if (route) {
+            navigate(route);
+        }
+    };
+
+    const handleKeyDown = (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            handleNavigate();
+        }
+    };
+
     return (
-        <div
+        <article
             className="action-card"
-            onClick={() => navigate(route)}
+            onClick={handleNavigate}
+            onKeyDown={handleKeyDown}
+            role="button"
+            tabIndex={0}
+            aria-label={`${title}: ${description}`}
         >
-
+            {/* Icon */}
             <div className="card-icon">
-                <Icon size={30} />
+                {Icon && <Icon size={26} strokeWidth={1.8} />}
             </div>
 
-            <h3>{title}</h3>
+            {/* Content */}
+            <div className="action-card-content">
+                <h3>{title}</h3>
 
-            <p>{description}</p>
-
-            <div className="card-arrow">
-                <ArrowUpRight size={22} />
+                <p>{description}</p>
             </div>
 
-        </div>
+            {/* Arrow */}
+            <div className="card-arrow" aria-hidden="true">
+                <ArrowUpRight size={20} strokeWidth={1.8} />
+            </div>
+        </article>
     );
 }
 

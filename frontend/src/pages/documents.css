@@ -1,95 +1,421 @@
-.documents-page{
-    display:flex;
-    flex-direction:column;
-    gap:32px;
+/* =========================================================
+   STRATUM — DOCUMENTS PAGE
+   ========================================================= */
+
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.documents-page {
+    display: flex;
+    flex-direction: column;
+
+    gap: 28px;
+
+    width: 100%;
+    max-width: 1500px;
+
+    margin: 0 auto;
 }
 
-.documents-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.documents-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 24px;
 }
 
-.documents-header h1{
-    font-size:42px;
-    font-family:"Sora";
+.documents-header h1 {
+    margin: 0 0 6px;
+
+    font-family: "Sora", sans-serif;
+
+    font-size: 42px;
+    font-weight: 700;
+
+    color: var(--text-primary);
 }
 
-.documents-header p{
-    color:#94A3B8;
+.documents-header p {
+    margin: 0;
+
+    color: var(--text-secondary);
+
+    font-size: 15px;
 }
 
-.documents-table{
-    background:#1E293B;
-    border-radius:24px;
-    overflow:hidden;
-}
 
-.table-header,
-.table-row{
-    display:grid;
-    grid-template-columns:2fr .8fr .8fr 1fr 1fr;
-    align-items:center;
-
-    padding:20px 28px;
-}
-
-.table-header{
-    background:#172033;
-    font-weight:600;
-}
-
-.table-row{
-    border-top:1px solid rgba(255,255,255,.05);
-    transition:.25s;
-}
-
-.table-row:hover{
-    background:#243245;
-}
-
-.doc-name{
-    display:flex;
-    align-items:center;
-    gap:14px;
-}
-
-.actions{
-    display:flex;
-    gap:18px;
-}
-
-.actions svg{
-    cursor:pointer;
-    transition:.2s;
-}
-
-.actions svg:hover{
-    color:#14B8A6;
-}
+/* =========================================================
+   SEARCH
+   ========================================================= */
 
 .document-search {
-    flex: 1;
+    width: 100%;
     max-width: 360px;
-    margin-left: 30px;
+
+    flex-shrink: 0;
 }
 
 .document-search input {
     width: 100%;
-    padding: 14px 18px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 12px;
-    background: #172033;
-    color: white;
+
+    padding: 13px 17px;
+
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+
+    background: var(--glass-bg);
+
+    color: var(--text-primary);
+
     font-size: 14px;
+
     outline: none;
-    box-sizing: border-box;
+
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+
+    box-shadow: var(--shadow-glass);
+
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .document-search input::placeholder {
-    color: #64748B;
+    color: var(--text-muted);
 }
 
 .document-search input:focus {
-    border-color: rgba(255, 255, 255, 0.2);
+    border-color: rgba(20, 184, 166, 0.45);
+
+    box-shadow:
+        0 0 0 3px rgba(20, 184, 166, 0.08),
+        var(--shadow-glass);
+}
+
+
+/* =========================================================
+   DOCUMENT TABLE
+   ========================================================= */
+
+.documents-table {
+    width: 100%;
+
+    overflow: hidden;
+
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+
+    background: var(--glass-bg);
+
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+
+    box-shadow: var(--shadow-glass);
+}
+
+
+/* =========================================================
+   TABLE HEADER + ROW
+   ========================================================= */
+
+.table-header,
+.table-row {
+    display: grid;
+
+    grid-template-columns:
+        minmax(240px, 2fr)
+        minmax(100px, 0.8fr)
+        minmax(100px, 0.8fr)
+        minmax(140px, 1fr)
+        minmax(100px, 0.7fr);
+
+    align-items: center;
+
+    gap: 16px;
+
+    padding: 19px 26px;
+}
+
+
+/* =========================================================
+   TABLE HEADER
+   ========================================================= */
+
+.table-header {
+    background: rgba(20, 184, 166, 0.055);
+
+    color: var(--text-secondary);
+
+    font-size: 13px;
+    font-weight: 600;
+
+    border-bottom: 1px solid var(--glass-border);
+}
+
+
+/* =========================================================
+   TABLE ROW
+   ========================================================= */
+
+.table-row {
+    min-height: 76px;
+
+    color: var(--text-primary);
+
+    border-top: 1px solid var(--glass-border);
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.table-row:first-of-type {
+    border-top: none;
+}
+
+.table-row:hover {
+    background: var(--surface-hover);
+}
+
+
+/* =========================================================
+   DOCUMENT NAME
+   ========================================================= */
+
+.doc-name {
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+}
+
+.doc-name > div {
+    min-width: 0;
+}
+
+.doc-name strong {
+    display: block;
+
+    overflow: hidden;
+
+    color: var(--text-primary);
+
+    font-size: 14px;
+    font-weight: 600;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.doc-name p {
+    margin: 4px 0 0;
+
+    color: var(--text-muted);
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   DOCUMENT ICON
+   ========================================================= */
+
+.doc-icon {
+    width: 44px;
+    height: 44px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 13px;
+
+    background:
+        rgba(20, 184, 166, 0.10);
+
+    color: var(--brand-accent);
+
+    border: 1px solid rgba(20, 184, 166, 0.12);
+}
+
+
+/* =========================================================
+   TABLE TEXT
+   ========================================================= */
+
+.table-row > span {
+    color: var(--text-secondary);
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.actions {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+}
+
+.actions button {
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid transparent;
+    border-radius: 10px;
+
+    background: transparent;
+
+    color: var(--text-secondary);
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.actions button:hover {
+    background: rgba(20, 184, 166, 0.08);
+
+    border-color: rgba(20, 184, 166, 0.14);
+
+    color: var(--brand-accent);
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.document-status {
+    display: inline-flex;
+    align-items: center;
+
+    width: fit-content;
+
+    padding: 5px 10px;
+
+    border-radius: 999px;
+
+    background: rgba(20, 184, 166, 0.08);
+
+    color: var(--brand-accent);
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.documents-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 260px;
+
+    padding: 40px;
+
+    text-align: center;
+
+    color: var(--text-secondary);
+}
+
+.documents-empty svg {
+    margin-bottom: 14px;
+
+    color: var(--brand-accent);
+}
+
+.documents-empty h3 {
+    margin-bottom: 6px;
+}
+
+.documents-empty p {
+    margin: 0;
+
+    max-width: 420px;
+
+    color: var(--text-muted);
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+    .documents-header {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .document-search {
+        max-width: 100%;
+    }
+
+    .documents-table {
+        overflow-x: auto;
+    }
+
+    .table-header,
+    .table-row {
+        min-width: 850px;
+    }
+}
+
+
+@media (max-width: 700px) {
+
+    .documents-page {
+        gap: 22px;
+    }
+
+    .documents-header h1 {
+        font-size: 34px;
+    }
+
+    .documents-table {
+        border-radius: 18px;
+    }
+
+    .table-header,
+    .table-row {
+        padding: 16px 18px;
+    }
 }

@@ -1,40 +1,62 @@
-import { Bell, Search, Moon } from "lucide-react";
-import logo from "../../assets/logo/Stratum.png";
+import { Bell } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 function Navbar() {
-  return (
-    <header className="navbar">
+    const navigate = useNavigate();
 
-      {/* Left */}
-      <div className="navbar-left">
+    // Later this will come from profile API
+    const profileImage = null;
 
-        <div className="search-box">
-          <Search size={18} />
-          <input
-            type="text"
-            placeholder="Search documents..."
-          />
-        </div>
+    const userInitial = "S";
 
-      </div>
+    return (
+        <header className="navbar">
 
-      {/* Right */}
-      <div className="navbar-right">
+            {/* LEFT SIDE */}
+            <div className="navbar-left">
+                {/* intentionally empty */}
+            </div>
 
-        <Bell className="nav-icon" size={20} />
+            {/* RIGHT SIDE */}
+            <div className="navbar-right">
 
-        <Moon className="nav-icon" size={20} />
+                {/* Notifications */}
+                <button
+                    type="button"
+                    className="navbar-icon-btn"
+                    aria-label="Notifications"
+                    title="Notifications"
+                >
+                    <Bell size={20} />
+                </button>
 
-        <img
-          src={logo}
-          alt="Stratum"
-          className="navbar-logo"
-        />
+                {/* Profile */}
+                <button
+                    type="button"
+                    className="navbar-profile"
+                    onClick={() => navigate("/profile")}
+                    aria-label="Profile"
+                    title="Profile"
+                >
 
-      </div>
+                    {profileImage ? (
+                        <img
+                            src={profileImage}
+                            alt="Profile"
+                            className="navbar-profile-image"
+                        />
+                    ) : (
+                        <span className="navbar-profile-initial">
+                            {userInitial}
+                        </span>
+                    )}
 
-    </header>
-  );
+                </button>
+
+            </div>
+
+        </header>
+    );
 }
 
 export default Navbar;

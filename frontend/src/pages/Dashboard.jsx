@@ -4,7 +4,8 @@ import "./dashboard.css";
 import ActionCard from "../components/common/ActionCard";
 import HeroSection from "../components/dashboard/HeroSection";
 import StatCard from "../components/dashboard/StatCard";
-import RecentDocuments from "../components/dashboard/RecentDocuments";
+import ChatbotLauncher from "../components/chatbot/ChatbotLauncher";
+
 
 import {
     FileText,
@@ -26,7 +27,10 @@ function Dashboard() {
                 const data = await getDocuments();
                 setDocuments(data.documents || []);
             } catch (error) {
-                console.error("Failed to load dashboard documents:", error);
+                console.error(
+                    "Failed to load dashboard documents:",
+                    error
+                );
             }
         };
 
@@ -40,51 +44,65 @@ function Dashboard() {
 
     const storageInMB = totalStorage / (1024 * 1024);
 
+    const formattedStorage =
+        totalStorage === 0
+            ? "0 KB"
+            : storageInMB < 1
+                ? `${(totalStorage / 1024).toFixed(1)} KB`
+                : `${storageInMB.toFixed(1)} MB`;
+
     return (
         <div className="dashboard-page">
 
-            {/* Hero Section */}
+            {/* =================================================
+                HERO
+            ================================================= */}
+
             <HeroSection />
 
-            {/* Stats Grid */}
-            <div className="stats-grid">
+
+            {/* =================================================
+                STATS
+            ================================================= */}
+
+            <section className="stats-grid">
 
                 <StatCard
                     title="Documents"
                     value={documents.length}
                     icon={FileText}
-                    color="#4f9409"
+                    color="var(--brand-accent)"
                 />
 
                 <StatCard
                     title="Chats"
                     value="0"
                     icon={MessageSquare}
-                    color="#2563EB"
+                    color="#3B82F6"
                 />
 
                 <StatCard
                     title="Knowledge Base"
                     value={`${documents.length} docs`}
                     icon={Database}
-                    color="#7C3AED"
+                    color="#8B5CF6"
                 />
 
                 <StatCard
                     title="Storage Used"
-                    value={
-                        storageInMB < 1
-                            ? `${(totalStorage / 1024).toFixed(1)} KB`
-                            : `${storageInMB.toFixed(1)} MB`
-                    }
+                    value={formattedStorage}
                     icon={HardDrive}
-                    color="#EA580C"
+                    color="#F97316"
                 />
 
-            </div>
+            </section>
 
-           {/* Quick Actions */}
-            <div className="quick-actions">
+
+            {/* =================================================
+                QUICK ACTIONS
+            ================================================= */}
+
+            <section className="quick-actions">
 
                 <ActionCard
                     icon={FileText}
@@ -114,10 +132,12 @@ function Dashboard() {
                     route="/summary"
                 />
 
-            </div>
+            </section>
+                 {/* =================================================
+                FLOATING AI CHATBOT
+            ================================================= */}
 
-            {/* Recent Documents */}
-            <RecentDocuments />
+            <ChatbotLauncher />
 
         </div>
     );
