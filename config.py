@@ -8,4 +8,4 @@ COLLECTION_NAME = "documents"
 TOP_K = 4
 
 # Groq
-LLM_MODEL = "llama-3.3-70b-versatile"
+LLM_MODEL = "openai/gpt-oss-20b"

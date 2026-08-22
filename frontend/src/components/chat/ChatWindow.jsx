@@ -1,7 +1,12 @@
 import MessageBubble from "./MessageBubble";
 import ChatInput from "./ChatInput";
 
-function ChatWindow({ messages, onSend, loading }) {
+function ChatWindow({
+    messages,
+    onSend,
+    loading,
+    onSourceClick,
+}) {
     return (
         <section className="chat-window">
 
@@ -20,13 +25,14 @@ function ChatWindow({ messages, onSend, loading }) {
                         user={msg.user}
                         message={msg.message}
                         sources={msg.sources}
+                        onSourceClick={onSourceClick}
                     />
                 ))}
 
                 {loading && (
                     <MessageBubble
                         user={false}
-                        message="Thinking..."
+                        message="Give me a second..."
                     />
                 )}
 

@@ -1,6 +1,7 @@
 import "./actionCard.css";
 import { ArrowUpRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import useTheme from "../../hooks/useTheme";
 
 function ActionCard({
     icon: Icon,
@@ -9,6 +10,7 @@ function ActionCard({
     route,
 }) {
     const navigate = useNavigate();
+    const { theme } = useTheme();
 
     const handleNavigate = () => {
         if (route) {
@@ -25,7 +27,7 @@ function ActionCard({
 
     return (
         <article
-            className="action-card"
+            className={`action-card${theme === "dark" ? " action-card--dark" : ""}`}
             onClick={handleNavigate}
             onKeyDown={handleKeyDown}
             role="button"

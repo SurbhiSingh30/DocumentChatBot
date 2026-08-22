@@ -50,6 +50,8 @@ def change_password(db, user, current_password, new_password):
     db.commit()
     db.refresh(user)
                             
-    return True                    
+    return True     
+
+               
             
                     

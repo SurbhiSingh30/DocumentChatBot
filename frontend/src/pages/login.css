@@ -80,3 +80,18 @@
     font-size:14px;
     margin:0;
 }
+
+.auth-switch {
+    text-align: center;
+    margin: 0;
+    font-size: 14px;
+}
+
+.auth-switch span {
+    color: #14B8A6;
+    font-weight: 600;
+}
+
+.auth-switch span:hover {
+    text-decoration: underline;
+}

@@ -300,7 +300,8 @@ class RAGPipeline:
                 ),
                 "chunk_number": metadata.get(
                     "chunk_number"
-                )
+                ),
+                "text": documents[i] if i < len(documents) else ""
             }
 
             if i < len(distances):

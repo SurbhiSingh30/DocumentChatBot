@@ -687,6 +687,33 @@
 
 
 /* =========================================================
+   DARK THEME — ACTION CARD GLASS
+   Keep the dashboard-specific glass treatment aligned with
+   the application's dark surface tokens.
+========================================================= */
+
+[data-theme="dark"] .action-card {
+    background:
+        linear-gradient(
+            145deg,
+            rgba(30, 41, 59, 0.78),
+            rgba(15, 23, 42, 0.62)
+        );
+
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .action-card:hover {
+    background:
+        linear-gradient(
+            145deg,
+            rgba(38, 52, 73, 0.88),
+            rgba(30, 41, 59, 0.72)
+        );
+}
+
+
+/* =========================================================
    RESPONSIVE
 ========================================================= */
 

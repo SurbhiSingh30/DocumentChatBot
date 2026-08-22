@@ -1,11 +1,11 @@
 function MessageBubble({
     user,
     message,
-    sources = []
+    sources = [],
+    onSourceClick,
 }) {
     return (
         <div className={`message ${user ? "user" : "ai"}`}>
-
             <div className="bubble">
 
                 <div className="message-content">
@@ -15,39 +15,51 @@ function MessageBubble({
                 {!user && sources.length > 0 && (
                     <div className="message-sources">
 
-                        <div className="sources-title">
+                        <div className="message-sources-title">
                             Sources
                         </div>
 
-                        {sources.map((source, index) => {
+                        <div className="message-source-list">
 
-                            const isPage =
-                                source.location_type === "page";
+                            {sources.map((source, index) => (
 
-                            return (
-                                <div
-                                    className="source-item"
-                                    key={index}
+                                <button
+                                    type="button"
+                                    className="message-source"
+                                    key={`${source.filename || "source"}-${source.location || index}`}
+                                    onClick={() =>
+                                        onSourceClick?.(source)
+                                    }
                                 >
-                                    <span>
-                                        📄 {source.filename}
+
+                                    <span className="message-source-icon">
+                                        📄
                                     </span>
 
-                                    <span>
-                                        {isPage
-                                            ? `Page ${source.location}`
-                                            : `Chunk ${source.chunk_number}`
-                                        }
-                                    </span>
-                                </div>
-                            );
-                        })}
+                                    <span className="message-source-text">
 
+                                        <span className="message-source-filename">
+                                            {source.filename || "Document"}
+                                        </span>
+
+                                        {source.location_type === "page" &&
+                                            source.location != null && (
+                                                <span className="message-source-location">
+                                                    Page {source.location}
+                                                </span>
+                                            )}
+
+                                    </span>
+
+                                </button>
+
+                            ))}
+
+                        </div>
                     </div>
                 )}
 
             </div>
-
         </div>
     );
 }

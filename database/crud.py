@@ -114,7 +114,6 @@ def search_documents_by_user(
         Document.document_id.desc()
     ).all()
 
-
 # =========================
 # CHATS
 # =========================
@@ -125,8 +124,9 @@ def create_chat(
     document_id: int
 ):
     chat = Chat(
-        user_id=user_id,
-        document_id=document_id
+    user_id=user_id,
+    document_id=document_id,
+    title="New Chat"
     )
 
     db.add(chat)
@@ -135,15 +135,37 @@ def create_chat(
 
     return chat
 
-
 def get_chat(
     db: Session,
     user_id: int,
-    document_id: int
+    chat_id: int
 ):
     return db.query(Chat).filter(
-        Chat.user_id == user_id,
-        Chat.document_id == document_id
+        Chat.chat_id == chat_id,
+        Chat.user_id == user_id
+    ).first()
+
+
+
+def get_chats_by_user(
+    db: Session,
+    user_id: int
+):
+    return db.query(Chat).filter(
+        Chat.user_id == user_id
+    ).order_by(
+        Chat.created_at.desc()
+    ).all()
+
+
+def get_chat_by_id(
+    db: Session,
+    user_id: int,
+    chat_id: int
+):
+    return db.query(Chat).filter(
+        Chat.chat_id == chat_id,
+        Chat.user_id == user_id
     ).first()
 
 
@@ -168,3 +190,14 @@ def create_message(
     db.refresh(message)
 
     return message
+
+
+def get_messages_by_chat(
+    db: Session,
+    chat_id: int
+):
+    return db.query(Message).filter(
+        Message.chat_id == chat_id
+    ).order_by(
+        Message.created_at.asc()
+    ).all()

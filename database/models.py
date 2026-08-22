@@ -84,13 +84,45 @@ class Chat(Base):
     __tablename__ = "chats"
 
     chat_id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.user_id"), nullable=False)
-    document_id = Column(Integer, ForeignKey("documents.document_id"), nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
 
-    user = relationship("User", back_populates="chats")
-    document = relationship("Document", back_populates="chats")
-    messages = relationship("Message", back_populates="chat", cascade="all, delete-orphan")
+    user_id = Column(
+        Integer,
+        ForeignKey("users.user_id"),
+        nullable=False
+    )
+
+    document_id = Column(
+        Integer,
+        ForeignKey("documents.document_id"),
+        nullable=False
+    )
+
+    title = Column(
+        String(250),
+        nullable=False,
+        default="New Chat"
+    )
+
+    created_at = Column(
+        DateTime,
+        default=datetime.utcnow
+    )
+
+    user = relationship(
+        "User",
+        back_populates="chats"
+    )
+
+    document = relationship(
+        "Document",
+        back_populates="chats"
+    )
+
+    messages = relationship(
+        "Message",
+        back_populates="chat",
+        cascade="all, delete-orphan"
+    )
 
 class Message(Base):
     __tablename__ = "messages"
